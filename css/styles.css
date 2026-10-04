@@ -454,11 +454,25 @@ ul, ol { padding: 0; list-style: none; }
 .print__family::-webkit-scrollbar { display: none; }
 .print__family li { scroll-snap-align: start; display: grid; gap: 10px; }
 .print__family span { font-size: var(--fs-sm); color: var(--text-2); }
-.print__wm { display: grid; grid-template-columns: 5fr 7fr; gap: 20px; align-items: center; margin-top: clamp(48px, 7vw, 96px); padding-top: clamp(32px, 4vw, 48px); border-top: 1px solid var(--line); }
+.caviar { margin-top: clamp(64px, 9vw, 120px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); display: grid; gap: clamp(20px, 3vw, 32px); }
+.caviar__head { display: grid; gap: 16px; }
+.caviar__tag { margin-top: 10px; }
+.caviar figure { display: grid; gap: 10px; align-content: start; }
+.caviar figcaption, .caviar__labels span { font-size: var(--fs-sm); color: var(--text-2); }
+.caviar__pair { display: grid; gap: 16px; }
+.caviar__labels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.caviar__labels li { display: grid; gap: 8px; }
+.caviar__note { max-width: 62ch; }
+.caviar__camp { display: grid; gap: 16px; }
+@media (min-width: 900px) {
+  .caviar__head { grid-template-columns: 5fr 7fr; gap: 56px; align-items: end; }
+  .caviar__pair { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .caviar__labels { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .caviar__camp { grid-template-columns: 3fr 7fr; gap: 20px; align-items: end; }
+}
 @media (min-width: 900px) {
   .print { grid-template-columns: 5fr 7fr; gap: 56px; align-items: center; }
   .print__family { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); overflow: visible; gap: 20px; }
-  .print__wm { grid-template-columns: 3fr 5fr 4fr; gap: 48px; }
 }
 
 /* Web: slideshow */
@@ -732,3 +746,6 @@ html.lenis, html.lenis body { height: auto; }
 .tv-end .logo__dot { width: .16em; height: .16em; margin-left: .04em; }
 .tv-wipe { position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; z-index: 3; pointer-events: none; }
 .intro__dot { z-index: 4; }
+.caviar__labels .tile { aspect-ratio: 1 / 1; }
+.caviar__pair .tile { aspect-ratio: 4 / 3; }
+.caviar__labels .tile img, .caviar__pair .tile img { height: 100%; object-fit: cover; }
