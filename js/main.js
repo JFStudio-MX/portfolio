@@ -83,6 +83,16 @@
       navLinks.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('href') === '#' + id); });
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
+  var tocLinks = $$('.case-toc a');
+  if (tocLinks.length) {
+    var tocObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        tocLinks.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('href') === '#' + en.target.id); });
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    $$('.chap').forEach(function (c) { tocObs.observe(c); });
+  }
   ['trabajo', 'servicios', 'experiencia', 'contacto'].forEach(function (id) {
     var s = document.getElementById(id); if (s) sectionObs.observe(s);
   });
@@ -90,19 +100,22 @@
   // Menú móvil
   var menu = $('#menu'), menuBtn = $('#menuBtn');
   function toggleMenu(open) {
+    if (!menu) return;
     menu.classList.toggle('is-open', open);
     menu.setAttribute('aria-hidden', String(!open));
     menuBtn.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('is-locked', open);
     if (open) $('#menuClose').focus(); else menuBtn.focus();
   }
-  menuBtn.addEventListener('click', function () { toggleMenu(true); });
-  $('#menuClose').addEventListener('click', function () { toggleMenu(false); });
-  $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { toggleMenu(false); }); });
+  if (menu) {
+    menuBtn.addEventListener('click', function () { toggleMenu(true); });
+    $('#menuClose').addEventListener('click', function () { toggleMenu(false); });
+    $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { toggleMenu(false); }); });
+  }
 
   /* ---------------- Hero (entrada) ---------------- */
   function heroIn() {
-    if (!hasGsap || reduceMQ.matches) return;
+    if (!hasGsap || reduceMQ.matches || !$('.hero')) return;
     var tl = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.1 } });
     tl.fromTo('.hero__img', { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, stagger: 0.12, clearProps: 'clipPath' }, 0)
       .from('.hero__img img', { scale: 1.25, duration: 1.8, stagger: 0.12 }, 0)
@@ -138,7 +151,7 @@
   }
 
   function playIntro() {
-    if (!hasGsap || reduceMQ.matches) return false;
+    if (!intro || !hasGsap || reduceMQ.matches) return false;
     intro.hidden = false;
     document.body.classList.add('is-locked');
     window.scrollTo(0, 0);
@@ -223,13 +236,15 @@
     return true;
   }
 
-  $('#introSkip').addEventListener('click', endIntro);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !intro.hidden) endIntro();
-  });
-  $('#replayIntro').addEventListener('click', function () {
-    if (!playIntro()) heroIn();
-  });
+  if (intro) {
+    $('#introSkip').addEventListener('click', endIntro);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !intro.hidden) endIntro();
+    });
+    $('#replayIntro').addEventListener('click', function () {
+      if (!playIntro()) heroIn();
+    });
+  }
 
   /* ---------------- Movimiento al hacer scroll ---------------- */
   function initScroll() {
@@ -238,14 +253,14 @@
 
     mm.add('(prefers-reduced-motion: no-preference)', function () {
       // Parallax del hero: cada capa a su profundidad
-      $$('[data-speed]').forEach(function (el) {
+      if ($('.hero')) $$('[data-speed]').forEach(function (el) {
         gsap.to(el, {
           yPercent: parseFloat(el.dataset.speed) * -100,
           ease: 'none',
           scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
         });
       });
-      gsap.to('.hero__copy', {
+      if ($('.hero')) gsap.to('.hero__copy', {
         yPercent: -14, ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
       });
@@ -291,7 +306,7 @@
     });
 
     // Paneo horizontal de eventos (desktop)
-    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', function () {
+    if ($('#pan')) mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', function () {
       var pan = $('#pan'), chapter = $('#eventos'), track = $('.pan__track', pan);
       pan.classList.add('is-pinned');
       chapter.classList.add('is-pinning');
@@ -327,6 +342,7 @@
 
   /* ---------------- Lightbox ---------------- */
   var lb = $('#lb'), lbImg = $('#lbImg'), lbCap = $('#lbCap'), lbCount = $('#lbCount');
+  if (lb) {
   var group = [], idx = 0, lastFocus = null;
 
   function srcOf(btn) { var i = $('img', btn); return i ? (i.getAttribute('src') || i.dataset.src) : ''; }
@@ -366,7 +382,7 @@
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb__stage')) closeLb(); });
   document.addEventListener('keydown', function (e) {
     if (lb.hidden) {
-      if (e.key === 'Escape' && menu.classList.contains('is-open')) toggleMenu(false);
+      if (e.key === 'Escape' && menu && menu.classList.contains('is-open')) toggleMenu(false);
       return;
     }
     if (e.key === 'Escape') closeLb();
@@ -386,6 +402,8 @@
     if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
   });
 
+  }
+
   /* ---------------- YouTube (fachada) ---------------- */
   $$('[data-yt]').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -401,7 +419,7 @@
 
   /* ---------------- Copiar correo ---------------- */
   var copyBtn = $('#copyMail');
-  copyBtn.addEventListener('click', function () {
+  if (copyBtn) copyBtn.addEventListener('click', function () {
     var label = $('span', copyBtn);
     var done = function () {
       var prev = label.innerHTML;
