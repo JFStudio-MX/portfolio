@@ -336,9 +336,7 @@
   });
 
   /* ---------------- Slideshow de sitios web ---------------- */
-  (function slideshow() {
-    var root = $('#slides');
-    if (!root) return;
+  $$('.slides').forEach(function slideshow(root) {
     var slides = $$('.slide', root), infos = $$('.slide-info', root), bars = $$('.slides__bars i', root), count = $('.slides__count', root);
     var i = 0, DUR = 6, timer = null, visible = false, hovering = false, barTween = null;
     function show(n, user) {
@@ -368,10 +366,10 @@
       var dx = e.clientX - sx; sx = null;
       if (Math.abs(dx) > 40) { moved = true; show(i + (dx < 0 ? 1 : -1), true); }
     });
-    view.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } }, true);
+    view.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     new IntersectionObserver(function (e) { visible = e[0].isIntersecting; run(); }, { threshold: 0.35 }).observe(root);
     show(0);
-  })();
+  });
 
   /* ---------------- Lightbox ---------------- */
   var lb = $('#lb'), lbImg = $('#lbImg'), lbCap = $('#lbCap'), lbCount = $('#lbCount');

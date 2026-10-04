@@ -257,40 +257,40 @@
       <h3 class="h2 chapter__kicker" id="evTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="Events &amp; large format">Eventos y gran formato</span></h3>
       <p class="body-2" data-reveal data-en="Prepress and on-site quality control for banners, vinyl, fabric and brand bridges up to 80 metres. Around 25 projects a month at Grupo Ideartte.">Preprensa y control de calidad en sitio para lonas, viniles, telas y puentes de marca de hasta 80 metros. Alrededor de 25 proyectos al mes en Grupo Ideartte.</p>
     </div>
-    <div class="pan" id="pan">
-      <div class="pan__viewport" tabindex="0" aria-label="Galería de eventos, desliza horizontalmente" data-en-aria-label="Events gallery, scroll horizontally">
-        <ul class="pan__track">
-          <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="FIFA World Cup 2026 · Estadio Ciudad de México"><img src="assets/img/events/fifa-2026-estadio-cdmx.jpg" width="1200" height="678" loading="lazy" alt="Fachada del Estadio Ciudad de México con lonas del Mundial FIFA 2026"></button></figure>
-            <div class="pan__cap"><b>FIFA World Cup 2026</b><span data-en="Mexico City Stadium · 2026">Estadio Ciudad de México · 2026</span></div>
-          </li>
-          <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="Gran Premio de México F1 · 2024"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" width="2048" height="1365" loading="lazy" alt="Foro Sol durante el Gran Premio de México de Fórmula 1"></button></figure>
-            <div class="pan__cap"><b data-en="Mexico City Grand Prix">Gran Premio de México</b><span>Fórmula 1 · 2024</span></div>
-          </li>
-          <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="EDC México 2025"><img src="assets/img/events/cartel-festival-edc-mexico-2025.jpg" width="1069" height="652" loading="lazy" alt="Escenario del festival EDC México 2025"></button></figure>
-            <div class="pan__cap"><b>EDC México</b><span data-en="Festival · 2025">Festival · 2025</span></div>
-          </li>
-          <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="Carnaval Santander"><img src="assets/img/events/carnaval-santander.jpg" width="841" height="566" loading="lazy" alt="Activación Carnaval Santander"></button></figure>
-            <div class="pan__cap"><b>Carnaval Santander</b><span data-en="Corporate activation">Activación corporativa</span></div>
-          </li>
-          <li class="pan__panel pan__panel--text">
-            <ul class="pan__list">
-              <li>FIFA World Cup 2026 <span data-en="CDMX, Zócalo Fan Fest, Atlanta, New York, Miami, Vancouver">CDMX, Fan Fest Zócalo, Atlanta, Nueva York, Miami, Vancouver</span></li>
-              <li data-en="Formula 1 <span>Mexico City GP</span>">Fórmula 1 <span>GP de México</span></li>
-              <li>Formula E <span data-en="Mexico City">Ciudad de México</span></li>
-              <li>NASCAR México <span>Motorsport</span></li>
-              <li>EDC · Corona Capital · Flow Fest <span data-en="Tier-1 festivals">Festivales tier-1</span></li>
-            </ul>
-          </li>
-        </ul>
+    <div class="wrap events">
+      <div class="slides slides--events" role="region" aria-roledescription="carrusel" aria-label="Fotos de eventos" data-en-aria-label="Event photos" data-reveal>
+        <div class="slides__view">
+          <button class="slide is-active" type="button" data-lb="events" data-cap="FIFA World Cup 2026 · 2026"><img src="assets/img/events/fifa-2026-estadio-cdmx.jpg" width="1200" height="678" loading="lazy" alt="Fachada del Estadio Ciudad de México con lonas del Mundial FIFA 2026"></button>
+          <button class="slide" type="button" data-lb="events" data-cap="Fórmula 1 · 2024"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" width="2048" height="1365" loading="lazy" alt="Foro Sol durante el Gran Premio de México de Fórmula 1"></button>
+          <button class="slide" type="button" data-lb="events" data-cap="EDC México · 2025"><img src="assets/img/events/cartel-festival-edc-mexico-2025.jpg" width="1069" height="652" loading="lazy" alt="Escenario del festival EDC México 2025"></button>
+          <button class="slide" type="button" data-lb="events" data-cap="Carnaval Santander · 2024"><img src="assets/img/events/carnaval-santander.jpg" width="841" height="566" loading="lazy" alt="Activación Carnaval Santander"></button>
+        </div>
+        <div class="slides__ui">
+          <div class="slides__info" aria-live="polite">
+            <div class="slide-info is-active"><p class="ev-cap"><b>FIFA World Cup 2026</b> <span data-en="Mexico City Stadium · 2026">Estadio Ciudad de México · 2026</span></p></div>
+            <div class="slide-info"><p class="ev-cap"><b>Fórmula 1</b> <span data-en="Mexico City Grand Prix · 2024">Gran Premio de México · 2024</span></p></div>
+            <div class="slide-info"><p class="ev-cap"><b>EDC México</b> <span data-en="Festival · 2025">Festival · 2025</span></p></div>
+            <div class="slide-info"><p class="ev-cap"><b>Carnaval Santander</b> <span data-en="Corporate activation · 2024">Activación corporativa · 2024</span></p></div>
+          </div>
+          <div class="slides__ctrl">
+            <div class="slides__bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+            <span class="slides__count tnum" aria-hidden="true">01 / 04</span>
+            <button class="pan__btn" type="button" data-slide="-1" aria-label="Foto anterior" data-en-aria-label="Previous photo"><svg class="icon" aria-hidden="true"><use href="#i-caret-left"/></svg></button>
+            <button class="pan__btn" type="button" data-slide="1" aria-label="Siguiente foto" data-en-aria-label="Next photo"><svg class="icon" aria-hidden="true"><use href="#i-caret-right"/></svg></button>
+          </div>
+        </div>
       </div>
-      <div class="pan__hint" aria-hidden="true">
-        <button class="pan__btn" type="button" data-pan="-1"><svg class="icon"><use href="#i-caret-left"/></svg></button>
-        <button class="pan__btn" type="button" data-pan="1"><svg class="icon"><use href="#i-caret-right"/></svg></button>
-      </div>
+      <ul class="ev" aria-label="Eventos" data-en-aria-label="Events">
+          <li data-reveal><span class="ev__y">2026</span><b>FIFA World Cup 2026</b><span class="ev__w" data-en="CDMX, Zócalo Fan Fest, Atlanta, New York, Miami, Vancouver">CDMX, Fan Fest Zócalo, Atlanta, Nueva York, Miami, Vancouver</span></li>
+          <li data-reveal><span class="ev__y">2025</span><b>NASCAR México</b><span class="ev__w" data-en="Motorsport">Motorsport</span></li>
+          <li data-reveal><span class="ev__y">2025</span><b>Formula E</b><span class="ev__w" data-en="Mexico City">Ciudad de México</span></li>
+          <li data-reveal><span class="ev__y">2025</span><b>EDC México</b><span class="ev__w" data-en="Festival">Festival</span></li>
+          <li data-reveal><span class="ev__y">2025</span><b>Vive Latino</b><span class="ev__w" data-en="Festival">Festival</span></li>
+          <li data-reveal><span class="ev__y">2024</span><b>Fórmula 1</b><span class="ev__w" data-en="Mexico City GP">GP de México</span></li>
+          <li data-reveal><span class="ev__y">2024</span><b>Corona Capital</b><span class="ev__w" data-en="Festival">Festival</span></li>
+          <li data-reveal><span class="ev__y">2024</span><b>Flow Fest</b><span class="ev__w" data-en="Festival">Festival</span></li>
+          <li data-reveal><span class="ev__y">2024</span><b>Carnaval Santander</b><span class="ev__w" data-en="Corporate activation">Activación corporativa</span></li>
+      </ul>
     </div>
   </article>
 
@@ -472,7 +472,7 @@
         <h3 class="h2 chapter__kicker" id="webTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="Web design">Diseño web</span></h3>
         <p class="body-2" data-reveal data-en="Brand sites designed and built end to end. Live, not mockups.">Sitios de marca diseñados y construidos de punta a punta. En línea, no maquetas.</p>
       </div>
-      <div class="slides" id="slides" role="region" aria-roledescription="carrusel" aria-label="Sitios web" data-en-aria-label="Websites" data-reveal>
+      <div class="slides" role="region" aria-roledescription="carrusel" aria-label="Sitios web" data-en-aria-label="Websites" data-reveal>
         <div class="slides__view">
           <a class="slide is-active" href="https://www.stearnsandfoster.com.mx" target="_blank" rel="noopener" aria-label="Stearns &amp; Foster México, abrir sitio" data-en-aria-label="Stearns &amp; Foster Mexico, open site"><img src="assets/img/web/site-stearns.jpg" width="1600" height="1000" loading="lazy" alt="Página de inicio de Stearns &amp; Foster México"></a>
           <a class="slide" href="https://ninino.mx" target="_blank" rel="noopener" aria-label="Ninino, abrir sitio" data-en-aria-label="Ninino, open site"><img src="assets/img/web/site-ninino.jpg" width="1600" height="1000" loading="lazy" alt="Página de inicio de Ninino"></a>
