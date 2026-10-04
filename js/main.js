@@ -66,6 +66,7 @@
       document.title = META[next].title;
       var d = $('meta[name="description"]'); if (d) d.setAttribute('content', META[next].desc);
     }
+    $$('[data-cv]').forEach(function (el) { el.setAttribute('href', 'docs/Joshua_Flores_CV_' + (next === 'en' ? 'EN' : 'ES') + '.pdf'); });
     var wa = $('#waLink'); if (wa) wa.href = 'https://wa.me/525527130635?text=' + encodeURIComponent(META[next].wa);
     if (persist) store.set('jf-lang', next);
     if (hasGsap) ScrollTrigger.refresh();
