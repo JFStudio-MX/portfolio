@@ -19,16 +19,11 @@
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 <script>
-  // Antes del primer pintado: decide movimiento e intro para evitar parpadeos.
+  // Antes del primer pintado: activa las apariciones (solo opacidad si el sistema pide menos movimiento).
   (function () {
     var d = document.documentElement;
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduce) d.classList.add('js-motion');
-    var seen = false;
-    try { seen = sessionStorage.getItem('jf-trailer') === '1'; } catch (e) {}
-    if (/[?&]intro=1/.test(location.search)) seen = false;
-    if (/[?&]intro=0/.test(location.search) || location.hash) seen = true;
-    if (!reduce && !seen) d.classList.add('play-intro');
+    d.classList.add('js-motion');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
   })();
 </script>
 <script type="application/ld+json">
@@ -48,111 +43,10 @@
 </script>
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none"><symbol id="i-arrow-up-right" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol><symbol id="i-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol><symbol id="i-arrow-down" viewBox="0 0 256 256"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="i-whatsapp-logo" viewBox="0 0 256 256"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></symbol><symbol id="i-linkedin-logo" viewBox="0 0 256 256"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"/></symbol><symbol id="i-envelope-simple" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol><symbol id="i-download-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></symbol><symbol id="i-play" viewBox="0 0 256 256"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></symbol><symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol><symbol id="i-caret-left" viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></symbol><symbol id="i-caret-right" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></symbol><symbol id="i-copy" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></symbol><symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="i-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol></svg>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none"><symbol id="i-arrow-up-right" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol><symbol id="i-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol><symbol id="i-arrow-down" viewBox="0 0 256 256"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="i-whatsapp-logo" viewBox="0 0 256 256"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></symbol><symbol id="i-linkedin-logo" viewBox="0 0 256 256"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"/></symbol><symbol id="i-envelope-simple" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol><symbol id="i-download-simple" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></symbol><symbol id="i-play" viewBox="0 0 256 256"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></symbol><symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol><symbol id="i-caret-left" viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></symbol><symbol id="i-caret-right" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></symbol><symbol id="i-copy" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></symbol><symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="i-pause" viewBox="0 0 256 256"><path d="M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z"/></symbol><symbol id="i-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol></svg>
 
 <a class="skip-link" href="#main" data-en="Skip to content">Saltar al contenido</a>
 <div class="grain" aria-hidden="true"></div>
-
-<!-- ============ TRAILER ============ -->
-<div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-label="Trailer de servicios" data-en-aria-label="Services trailer">
-  <div class="intro__grid" aria-hidden="true"></div>
-  <div class="intro__frame" aria-hidden="true">
-    <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span>
-    <span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
-  </div>
-  <span class="reg intro__reg intro__reg--t" aria-hidden="true"><i></i></span>
-  <span class="reg intro__reg intro__reg--b" aria-hidden="true"><i></i></span>
-  <span class="reg intro__reg intro__reg--l" aria-hidden="true"><i></i></span>
-  <span class="reg intro__reg intro__reg--r" aria-hidden="true"><i></i></span>
-
-  <div class="intro__stage" aria-hidden="true">
-    <!-- Apertura: nombre en registro CMYK -->
-    <div class="intro__scene" data-scene="name">
-      <div>
-        <div class="sep display">
-          <span class="sep__base">Joshua Flores</span>
-          <span class="sep__l sep__l--c">Joshua Flores</span>
-          <span class="sep__l sep__l--m">Joshua Flores</span>
-          <span class="sep__l sep__l--y">Joshua Flores</span>
-          <span class="sep__w">Joshua Flores</span>
-        </div>
-        <p class="intro__role" data-en="Graphic &amp; multimedia designer">Diseñador gráfico y multimedia</p>
-      </div>
-    </div>
-
-    <!-- 01 · IA -->
-    <div class="tv" data-scene="ai">
-      <div class="tv__visual tv-ai">
-        <p class="tv-prompt"><span class="tv-prompt__k">prompt</span><span class="tv-type" data-en="high chair, bright kitchen, morning light">silla alta, cocina luminosa, luz de mañana</span><i class="tv-caret"></i></p>
-        <div class="tv-ai__frame"><img src="assets/img/ai/ninino-01-contexto.jpg" alt=""><i class="tv-scan"></i></div>
-      </div>
-      <div class="tv__title"><span class="tv__num">01</span><p class="display" data-en="AI product&lt;br&gt;imagery">Imagen de producto<br>con IA</p></div>
-    </div>
-
-    <!-- 02 · E-commerce -->
-    <div class="tv" data-scene="ecom">
-      <div class="tv__visual tv-grid">
-        <img src="assets/img/ecom/fellowes_black_friday.jpg" alt="">
-        <img src="assets/img/ecom/sealy_crown_jewel.jpg" alt="">
-        <img src="assets/img/ecom/dahle_vantage18.jpg" alt="">
-        <img src="assets/img/ecom/fellowes_venus125_navidad.jpg" alt="">
-        <img src="assets/img/ecom/ourkisa_benito_juarez.jpg" alt="">
-        <img src="assets/img/ecom/fellowes_pulsar300.jpg" alt="">
-      </div>
-      <div class="tv__title"><span class="tv__num">02</span><p class="display" data-en="Campaigns &amp;&lt;br&gt;&lt;span class=&quot;nw&quot;&gt;e-commerce&lt;/span&gt;">Campañas y<br><span class="nw">e-commerce</span></p></div>
-      <p class="tv__meta"><b data-tv-count="100">0</b>+ SKUs</p>
-    </div>
-
-    <!-- 03 · Gran formato -->
-    <div class="tv" data-scene="events">
-      <div class="tv__visual tv-banner">
-        <div class="tv-banner__strip"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" alt=""></div>
-        <div class="tv-ruler"><i class="tv-ruler__line"></i><span class="tv-ruler__n"><b data-tv-count="80">0</b> m</span></div>
-      </div>
-      <div class="tv__title"><span class="tv__num">03</span><p class="display" data-en="Large format&lt;br&gt;&amp; events">Gran formato<br>y eventos</p></div>
-    </div>
-
-    <!-- 04 · Video -->
-    <div class="tv" data-scene="video">
-      <div class="tv__visual tv-video">
-        <div class="tv-phone"><img src="assets/img/ai/polo-02-lifestyle.jpg" alt=""></div>
-        <div class="tv-edit">
-          <span class="tv-tc">00:00:00</span>
-          <div class="tv-timeline"><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-playhead"></i></div>
-          <span class="tv-format">9:16</span>
-        </div>
-      </div>
-      <div class="tv__title"><span class="tv__num">04</span><p class="display" data-en="Video &amp;&lt;br&gt;motion">Video y<br>motion</p></div>
-    </div>
-
-    <!-- 05 · Web -->
-    <div class="tv" data-scene="web">
-      <div class="tv__visual tv-web">
-        <div class="tv-browser">
-          <div class="tv-browser__bar"><i></i><i></i><i></i><span class="tv-url">stearnsandfoster.com.mx</span></div>
-          <div class="tv-browser__view"><img src="assets/img/web/site-stearns.jpg" alt=""></div>
-        </div>
-      </div>
-      <div class="tv__title"><span class="tv__num">05</span><p class="display" data-en="Web&lt;br&gt;design">Diseño<br>web</p></div>
-    </div>
-
-    <!-- Cierre -->
-    <div class="intro__scene" data-scene="end">
-      <div>
-        <p class="display tv-end">Joshua Flores<span class="logo__dot"></span></p>
-        <p class="intro__role" data-en="One designer. Screen to stadium.">Un diseñador. De la pantalla al estadio.</p>
-      </div>
-    </div>
-
-    <i class="tv-wipe"></i>
-    <div class="intro__dot"></div>
-  </div>
-
-  <div class="intro__ui">
-    <div class="intro__progress" aria-hidden="true"><i></i></div>
-    <button class="intro__skip" type="button" id="introSkip"><span data-en="Skip trailer">Saltar trailer</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
-  </div>
-</div>
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
@@ -202,10 +96,105 @@
       <p class="hero__sub" data-hero data-en="Design that works on a 6-inch screen and on an 80-metre banner.">Diseño que funciona en una pantalla de 6 pulgadas y en una lona de 80 metros.</p>
       <div class="hero__ctas" data-hero>
         <a href="#contacto" class="btn btn--primary"><span data-en="Hire me">Contratar</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
-        <button type="button" class="btn btn--ghost" id="playTrailer"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span data-en="Watch trailer">Ver trailer</span></button>
+        <a href="#trailer" class="btn btn--ghost"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span data-en="Watch trailer">Ver trailer</span></a>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ============ TRAILER ============ -->
+<section class="trailer" id="trailer" aria-label="Trailer">
+<div class="intro" id="intro">
+  <div class="intro__grid" aria-hidden="true"></div>
+  <div class="intro__frame" aria-hidden="true">
+    <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span>
+    <span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
+  </div>
+  <span class="reg intro__reg intro__reg--t" aria-hidden="true"><i></i></span>
+  <span class="reg intro__reg intro__reg--b" aria-hidden="true"><i></i></span>
+  <span class="reg intro__reg intro__reg--l" aria-hidden="true"><i></i></span>
+  <span class="reg intro__reg intro__reg--r" aria-hidden="true"><i></i></span>
+
+  <div class="intro__stage" aria-hidden="true">
+    <!-- Apertura: nombre en registro CMYK -->
+    <div class="intro__scene" data-scene="name">
+      <div>
+        <div class="sep display">
+          <span class="sep__base">Joshua Flores</span>
+          <span class="sep__l sep__l--c">Joshua Flores</span>
+          <span class="sep__l sep__l--m">Joshua Flores</span>
+          <span class="sep__l sep__l--y">Joshua Flores</span>
+          <span class="sep__w">Joshua Flores</span>
+        </div>
+        <p class="intro__role">Graphic &amp; multimedia designer</p>
+      </div>
+    </div>
+
+    <!-- 01 · IA -->
+    <div class="tv" data-scene="ai">
+      <div class="tv__visual tv-ai">
+        <p class="tv-prompt"><span class="tv-prompt__k">prompt</span><span class="tv-type">high chair, bright kitchen, morning light</span><i class="tv-caret"></i></p>
+        <div class="tv-ai__frame"><img src="assets/img/ai/ninino-01-contexto.jpg" alt=""><i class="tv-scan"></i></div>
+      </div>
+      <div class="tv__title"><span class="tv__num">01</span><p class="display">AI product<br>imagery</p></div>
+    </div>
+
+    <!-- 02 · E-commerce -->
+    <div class="tv" data-scene="ecom">
+      <div class="tv__visual tv-grid">
+        <img src="assets/img/ecom/fellowes_black_friday.jpg" alt="">
+        <img src="assets/img/ecom/sealy_crown_jewel.jpg" alt="">
+        <img src="assets/img/ecom/dahle_vantage18.jpg" alt="">
+        <img src="assets/img/ecom/fellowes_venus125_navidad.jpg" alt="">
+        <img src="assets/img/ecom/ourkisa_benito_juarez.jpg" alt="">
+        <img src="assets/img/ecom/fellowes_pulsar300.jpg" alt="">
+      </div>
+      <div class="tv__title"><span class="tv__num">02</span><p class="display">Campaigns &amp;<br><span class="nw">e-commerce</span></p></div>
+      <p class="tv__meta"><b data-tv-count="100">0</b>+ SKUs</p>
+    </div>
+
+    <!-- 03 · Gran formato -->
+    <div class="tv" data-scene="events">
+      <div class="tv__visual tv-banner">
+        <div class="tv-banner__strip"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" alt=""></div>
+        <div class="tv-ruler"><i class="tv-ruler__line"></i><span class="tv-ruler__n"><b data-tv-count="80">0</b> m</span></div>
+      </div>
+      <div class="tv__title"><span class="tv__num">03</span><p class="display">Large format<br>&amp; events</p></div>
+    </div>
+
+    <!-- 04 · Video -->
+    <div class="tv" data-scene="video">
+      <div class="tv__visual tv-video">
+        <div class="tv-phone"><img src="assets/img/ai/polo-02-lifestyle.jpg" alt=""></div>
+        <div class="tv-edit">
+          <span class="tv-tc">00:00:00</span>
+          <div class="tv-timeline"><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-playhead"></i></div>
+          <span class="tv-format">9:16</span>
+        </div>
+      </div>
+      <div class="tv__title"><span class="tv__num">04</span><p class="display">Video &amp;<br>motion</p></div>
+    </div>
+
+    <!-- 05 · Web -->
+    <div class="tv" data-scene="web">
+      <div class="tv__visual tv-web">
+        <div class="tv-browser">
+          <div class="tv-browser__bar"><i></i><i></i><i></i><span class="tv-url">stearnsandfoster.com.mx</span></div>
+          <div class="tv-browser__view"><img src="assets/img/web/site-stearns.jpg" alt=""></div>
+        </div>
+      </div>
+      <div class="tv__title"><span class="tv__num">05</span><p class="display">Web<br>design</p></div>
+    </div>
+
+    <i class="tv-wipe"></i>
+  </div>
+
+  <div class="intro__ui">
+    <div class="intro__progress" aria-hidden="true"><i></i></div>
+    <span class="intro__tag">Joshua Flores · Showreel</span>
+    <button class="intro__skip" type="button" id="trailerToggle" aria-pressed="false" aria-label="Pausar trailer" data-en-aria-label="Pause trailer"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></button>
+  </div>
+</div>
 </section>
 
 <!-- ============ MARCAS ============ -->
@@ -213,12 +202,16 @@
   <div class="wrap">
     <h2 class="label brands__t" id="brandsTitle" data-reveal data-en="Brands and events I have worked with">Marcas y eventos con los que he trabajado</h2>
     <ul class="brands">
-      <li data-reveal><img src="assets/logos/fifa.svg" alt="FIFA World Cup 2026" class="brands__emblem"></li>
-      <li data-reveal><img src="assets/logos/f1.svg" alt="Fórmula 1" class="brands__mark"></li>
-      <li data-reveal><img src="assets/logos/sealy.png" alt="Sealy" class="brands__emblem"></li>
-      <li data-reveal><img src="assets/logos/fellowes.png" alt="Fellowes" class="brands__word"></li>
-      <li data-reveal><img src="assets/logos/dahle.png" alt="Dahle" class="brands__word"></li>
-      <li data-reveal><img src="assets/logos/ourkisa.png" alt="Ourkisa" class="brands__emblem"></li>
+      <li data-reveal><img src="assets/logos/fifa.svg" alt="FIFA World Cup 2026" class="brands__emblem" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/f1.svg" alt="Fórmula 1" class="brands__mark" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/nascar.png" alt="NASCAR México" class="brands__word" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/edc.png" alt="EDC México" class="brands__emblem" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/coronacapital.png" alt="Corona Capital" class="brands__word" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/vivelatino.png" alt="Vive Latino" class="brands__emblem" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/sealy.png" alt="Sealy" class="brands__emblem" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/fellowes.png" alt="Fellowes" class="brands__word" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/dahle.png" alt="Dahle" class="brands__word" loading="lazy"></li>
+      <li data-reveal><img src="assets/logos/ourkisa.png" alt="Ourkisa" class="brands__emblem" loading="lazy"></li>
     </ul>
   </div>
 </section>
@@ -680,7 +673,7 @@
   <div class="wrap footer__inner">
     <span>© 2026 Joshua Flores</span>
     <span style="display: flex; gap: 24px">
-      <button type="button" id="replayIntro" data-en="Watch trailer">Ver trailer</button>
+      <a href="#trailer" data-en="Watch trailer">Ver trailer</a>
       <a href="#top" data-en="Back to top">Volver arriba</a>
     </span>
   </div>
