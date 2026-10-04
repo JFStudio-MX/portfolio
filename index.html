@@ -19,15 +19,15 @@
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 <script>
-  // Antes del primer pintado: decide idioma e intro para evitar parpadeos.
+  // Antes del primer pintado: decide movimiento e intro para evitar parpadeos.
   (function () {
     var d = document.documentElement;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce) d.classList.add('js-motion');
     var seen = false;
-    try { seen = localStorage.getItem('jf-intro-seen') === '1'; } catch (e) {}
+    try { seen = sessionStorage.getItem('jf-trailer') === '1'; } catch (e) {}
     if (/[?&]intro=1/.test(location.search)) seen = false;
-    if (/[?&]intro=0/.test(location.search)) seen = true;
+    if (/[?&]intro=0/.test(location.search) || location.hash) seen = true;
     if (!reduce && !seen) d.classList.add('play-intro');
   })();
 </script>
@@ -54,7 +54,7 @@
 <div class="grain" aria-hidden="true"></div>
 
 <!-- ============ TRAILER ============ -->
-<div class="intro" id="intro" hidden aria-label="Intro animada" data-en-aria-label="Animated intro" role="dialog" aria-modal="true">
+<div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-label="Trailer de servicios" data-en-aria-label="Services trailer">
   <div class="intro__grid" aria-hidden="true"></div>
   <div class="intro__frame" aria-hidden="true">
     <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span>
@@ -65,16 +65,8 @@
   <span class="reg intro__reg intro__reg--l" aria-hidden="true"><i></i></span>
   <span class="reg intro__reg intro__reg--r" aria-hidden="true"><i></i></span>
 
-  <div class="intro__montage" aria-hidden="true">
-    <img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" alt="">
-    <img src="assets/img/ecom/fellowes_dia_maestro.jpg" alt="">
-    <img src="assets/img/ai/polo-02-lifestyle.jpg" alt="">
-    <img src="assets/img/events/fifa-2026-estadio-cdmx.jpg" alt="">
-    <img src="assets/img/print/carnivorus-salami.webp" alt="">
-    <img src="assets/img/ai/ninino-01-contexto.jpg" alt="">
-  </div>
-
   <div class="intro__stage" aria-hidden="true">
+    <!-- Apertura: nombre en registro CMYK -->
     <div class="intro__scene" data-scene="name">
       <div>
         <div class="sep display">
@@ -87,15 +79,78 @@
         <p class="intro__role" data-en="Graphic &amp; multimedia designer">Diseñador gráfico y multimedia</p>
       </div>
     </div>
-    <div class="intro__scene" data-scene="s1"><p class="intro__stat display">100+<small data-en="SKUs under visual management">SKUs bajo gestión visual</small></p></div>
-    <div class="intro__scene" data-scene="s2"><p class="intro__stat display">80 m<small data-en="Of banner. Prepress and QA">De lona. Preprensa y QA</small></p></div>
-    <div class="intro__scene" data-scene="s3"><p class="intro__stat display">FIFA 26<small data-en="Signage in 5 host cities">Señalética en 5 ciudades sede</small></p></div>
+
+    <!-- 01 · IA -->
+    <div class="tv" data-scene="ai">
+      <div class="tv__visual tv-ai">
+        <p class="tv-prompt"><span class="tv-prompt__k">prompt</span><span class="tv-type" data-en="high chair, bright kitchen, morning light">silla alta, cocina luminosa, luz de mañana</span><i class="tv-caret"></i></p>
+        <div class="tv-ai__frame"><img src="assets/img/ai/ninino-01-contexto.jpg" alt=""><i class="tv-scan"></i></div>
+      </div>
+      <div class="tv__title"><span class="tv__num">01</span><p class="display" data-en="AI product&lt;br&gt;imagery">Imagen de producto<br>con IA</p></div>
+    </div>
+
+    <!-- 02 · E-commerce -->
+    <div class="tv" data-scene="ecom">
+      <div class="tv__visual tv-grid">
+        <img src="assets/img/ecom/fellowes_black_friday.jpg" alt="">
+        <img src="assets/img/ecom/sealy_crown_jewel.jpg" alt="">
+        <img src="assets/img/ecom/dahle_vantage18.jpg" alt="">
+        <img src="assets/img/ecom/fellowes_venus125_navidad.jpg" alt="">
+        <img src="assets/img/ecom/ourkisa_benito_juarez.jpg" alt="">
+        <img src="assets/img/ecom/fellowes_pulsar300.jpg" alt="">
+      </div>
+      <div class="tv__title"><span class="tv__num">02</span><p class="display" data-en="Campaigns &amp;&lt;br&gt;&lt;span class=&quot;nw&quot;&gt;e-commerce&lt;/span&gt;">Campañas y<br><span class="nw">e-commerce</span></p></div>
+      <p class="tv__meta"><b data-tv-count="100">0</b>+ SKUs</p>
+    </div>
+
+    <!-- 03 · Gran formato -->
+    <div class="tv" data-scene="events">
+      <div class="tv__visual tv-banner">
+        <div class="tv-banner__strip"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" alt=""></div>
+        <div class="tv-ruler"><i class="tv-ruler__line"></i><span class="tv-ruler__n"><b data-tv-count="80">0</b> m</span></div>
+      </div>
+      <div class="tv__title"><span class="tv__num">03</span><p class="display" data-en="Large format&lt;br&gt;&amp; events">Gran formato<br>y eventos</p></div>
+    </div>
+
+    <!-- 04 · Video -->
+    <div class="tv" data-scene="video">
+      <div class="tv__visual tv-video">
+        <div class="tv-phone"><img src="assets/img/ai/polo-02-lifestyle.jpg" alt=""></div>
+        <div class="tv-edit">
+          <span class="tv-tc">00:00:00</span>
+          <div class="tv-timeline"><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-clip"></i><i class="tv-playhead"></i></div>
+          <span class="tv-format">9:16</span>
+        </div>
+      </div>
+      <div class="tv__title"><span class="tv__num">04</span><p class="display" data-en="Video &amp;&lt;br&gt;motion">Video y<br>motion</p></div>
+    </div>
+
+    <!-- 05 · Web -->
+    <div class="tv" data-scene="web">
+      <div class="tv__visual tv-web">
+        <div class="tv-browser">
+          <div class="tv-browser__bar"><i></i><i></i><i></i><span class="tv-url">stearnsandfoster.com.mx</span></div>
+          <div class="tv-browser__view"><img src="assets/img/web/site-stearns.jpg" alt=""></div>
+        </div>
+      </div>
+      <div class="tv__title"><span class="tv__num">05</span><p class="display" data-en="Web&lt;br&gt;design">Diseño<br>web</p></div>
+    </div>
+
+    <!-- Cierre -->
+    <div class="intro__scene" data-scene="end">
+      <div>
+        <p class="display tv-end">Joshua Flores<span class="logo__dot"></span></p>
+        <p class="intro__role" data-en="One designer. Screen to stadium.">Un diseñador. De la pantalla al estadio.</p>
+      </div>
+    </div>
+
+    <i class="tv-wipe"></i>
     <div class="intro__dot"></div>
   </div>
 
   <div class="intro__ui">
     <div class="intro__progress" aria-hidden="true"><i></i></div>
-    <button class="intro__skip" type="button" id="introSkip"><span data-en="Skip intro">Saltar intro</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+    <button class="intro__skip" type="button" id="introSkip"><span data-en="Skip trailer">Saltar trailer</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
   </div>
 </div>
 
@@ -136,29 +191,36 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero wrap" id="top" aria-labelledby="heroName">
-  <div class="hero__art" aria-hidden="true">
-    <figure class="hero__img hero__img--a" data-speed="-0.12"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" width="2048" height="1365" alt="" fetchpriority="high"></figure>
-    <figure class="hero__img hero__img--b" data-speed="0.18"><img src="assets/img/print/carnivorus-salami.webp" width="1122" height="1402" alt=""></figure>
-    <figure class="hero__img hero__img--c" data-speed="0.32"><img src="assets/img/events/fifa-2026-estadio-cdmx.jpg" width="1200" height="678" alt=""></figure>
+  <div class="hero__marks" aria-hidden="true">
+    <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span>
+    <span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
   </div>
   <div class="hero__copy">
-    <p class="label hero__eyebrow" data-hero="eyebrow" data-en="Graphic &amp; multimedia designer · Mexico City">Diseñador gráfico y multimedia · CDMX</p>
-    <h1 class="display hero__name" id="heroName" data-hero="name">Joshua<br>Flores<span class="logo__dot" aria-hidden="true"></span></h1>
+    <p class="label" data-hero data-en="Graphic &amp; multimedia designer · Mexico City">Diseñador gráfico y multimedia · CDMX</p>
+    <h1 class="display hero__name" id="heroName"><span class="hero__line" data-hero>Joshua</span><span class="hero__line" data-hero>Flores<span class="logo__dot" aria-hidden="true"></span></span></h1>
     <div class="hero__row">
-      <p class="hero__sub" data-hero="sub" data-en="Design that works on a 6-inch screen and on an 80-metre banner.">Diseño que funciona en una pantalla de 6 pulgadas y en una lona de 80 metros.</p>
-      <div class="hero__ctas" data-hero="ctas">
+      <p class="hero__sub" data-hero data-en="Design that works on a 6-inch screen and on an 80-metre banner.">Diseño que funciona en una pantalla de 6 pulgadas y en una lona de 80 metros.</p>
+      <div class="hero__ctas" data-hero>
         <a href="#contacto" class="btn btn--primary"><span data-en="Hire me">Contratar</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
-        <a href="#trabajo" class="btn btn--ghost" data-en="See the work">Ver trabajo</a>
+        <button type="button" class="btn btn--ghost" id="playTrailer"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span data-en="Watch trailer">Ver trailer</span></button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============ MARCAS ============ -->
-<section class="ticker" aria-label="Marcas y eventos" data-en-aria-label="Brands and events">
-  <ul class="ticker__track">
-    <li class="ticker__item ticker__item--emblem"><img src="assets/logos/fifa.svg" alt="FIFA World Cup 2026" loading="lazy"></li><li class="ticker__item ticker__item--mark"><img src="assets/logos/f1.svg" alt="Fórmula 1" loading="lazy"></li><li class="ticker__item ticker__item--emblem"><img src="assets/logos/sealy.png" alt="Sealy" loading="lazy"></li><li class="ticker__item ticker__item--word"><img src="assets/logos/fellowes.png" alt="Fellowes" loading="lazy"></li><li class="ticker__item ticker__item--word"><img src="assets/logos/dahle.png" alt="Dahle" loading="lazy"></li><li class="ticker__item ticker__item--emblem"><img src="assets/logos/ourkisa.png" alt="Ourkisa" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/fifa.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--mark" aria-hidden="true"><img src="assets/logos/f1.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/sealy.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/fellowes.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/dahle.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/ourkisa.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/fifa.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--mark" aria-hidden="true"><img src="assets/logos/f1.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/sealy.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/fellowes.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/dahle.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/ourkisa.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/fifa.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--mark" aria-hidden="true"><img src="assets/logos/f1.svg" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/sealy.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/fellowes.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--word" aria-hidden="true"><img src="assets/logos/dahle.png" alt="" loading="lazy"></li><li class="ticker__item ticker__item--emblem" aria-hidden="true"><img src="assets/logos/ourkisa.png" alt="" loading="lazy"></li>
-  </ul>
+<section class="brands-band" aria-labelledby="brandsTitle">
+  <div class="wrap">
+    <h2 class="label brands__t" id="brandsTitle" data-reveal data-en="Brands and events I have worked with">Marcas y eventos con los que he trabajado</h2>
+    <ul class="brands">
+      <li data-reveal><img src="assets/logos/fifa.svg" alt="FIFA World Cup 2026" class="brands__emblem"></li>
+      <li data-reveal><img src="assets/logos/f1.svg" alt="Fórmula 1" class="brands__mark"></li>
+      <li data-reveal><img src="assets/logos/sealy.png" alt="Sealy" class="brands__emblem"></li>
+      <li data-reveal><img src="assets/logos/fellowes.png" alt="Fellowes" class="brands__word"></li>
+      <li data-reveal><img src="assets/logos/dahle.png" alt="Dahle" class="brands__word"></li>
+      <li data-reveal><img src="assets/logos/ourkisa.png" alt="Ourkisa" class="brands__emblem"></li>
+    </ul>
+  </div>
 </section>
 
 <!-- ============ CIFRAS ============ -->
@@ -199,8 +261,8 @@
   <!-- 1 · Eventos -->
   <article class="band band--alt" id="eventos" aria-labelledby="evTitle" style="padding-bottom: clamp(48px, 7vw, 96px)">
     <div class="wrap chapter">
-      <h3 class="h2 chapter__kicker" id="evTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span data-en="Events &amp; large format">Eventos y gran formato</span></h3>
-      <p class="body-2" data-en="Prepress and on-site quality control for banners, vinyl, fabric and brand bridges up to 80 metres. Around 25 projects a month at Grupo Ideartte.">Preprensa y control de calidad en sitio para lonas, viniles, telas y puentes de marca de hasta 80 metros. Alrededor de 25 proyectos al mes en Grupo Ideartte.</p>
+      <h3 class="h2 chapter__kicker" id="evTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="Events &amp; large format">Eventos y gran formato</span></h3>
+      <p class="body-2" data-reveal data-en="Prepress and on-site quality control for banners, vinyl, fabric and brand bridges up to 80 metres. Around 25 projects a month at Grupo Ideartte.">Preprensa y control de calidad en sitio para lonas, viniles, telas y puentes de marca de hasta 80 metros. Alrededor de 25 proyectos al mes en Grupo Ideartte.</p>
     </div>
     <div class="pan" id="pan">
       <div class="pan__viewport" tabindex="0" aria-label="Galería de eventos, desliza horizontalmente" data-en-aria-label="Events gallery, scroll horizontally">
@@ -210,11 +272,11 @@
             <div class="pan__cap"><b>FIFA World Cup 2026</b><span data-en="Mexico City Stadium · 2026">Estadio Ciudad de México · 2026</span></div>
           </li>
           <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="Gran Premio de México F1 · 2024"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" width="2048" height="1365" loading="lazy" alt="Foro Sol durante el Gran Premio de México de Fórmula 1 con gráficos de pista y gradas"></button></figure>
+            <figure><button class="tile" type="button" data-lb="events" data-cap="Gran Premio de México F1 · 2024"><img src="assets/img/events/gp-de-mexico-formula-1-2024.jpg" width="2048" height="1365" loading="lazy" alt="Foro Sol durante el Gran Premio de México de Fórmula 1"></button></figure>
             <div class="pan__cap"><b data-en="Mexico City Grand Prix">Gran Premio de México</b><span>Fórmula 1 · 2024</span></div>
           </li>
           <li class="pan__panel">
-            <figure><button class="tile" type="button" data-lb="events" data-cap="EDC México 2025"><img src="assets/img/events/cartel-festival-edc-mexico-2025.jpg" width="1069" height="652" loading="lazy" alt="Gráfica del festival EDC México 2025"></button></figure>
+            <figure><button class="tile" type="button" data-lb="events" data-cap="EDC México 2025"><img src="assets/img/events/cartel-festival-edc-mexico-2025.jpg" width="1069" height="652" loading="lazy" alt="Escenario del festival EDC México 2025"></button></figure>
             <div class="pan__cap"><b>EDC México</b><span data-en="Festival · 2025">Festival · 2025</span></div>
           </li>
           <li class="pan__panel">
@@ -224,7 +286,7 @@
           <li class="pan__panel pan__panel--text">
             <ul class="pan__list">
               <li>FIFA World Cup 2026 <span data-en="CDMX, Zócalo Fan Fest, Atlanta, New York, Miami, Vancouver">CDMX, Fan Fest Zócalo, Atlanta, Nueva York, Miami, Vancouver</span></li>
-              <li data-en-html="Formula 1 <span>Mexico City GP</span>">Fórmula 1 <span>GP de México</span></li>
+              <li data-en="Formula 1 <span>Mexico City GP</span>">Fórmula 1 <span>GP de México</span></li>
               <li>Formula E <span data-en="Mexico City">Ciudad de México</span></li>
               <li>NASCAR México <span>Motorsport</span></li>
               <li>EDC · Corona Capital · Flow Fest <span data-en="Tier-1 festivals">Festivales tier-1</span></li>
@@ -241,43 +303,62 @@
 
   <!-- 2 · E-commerce -->
   <article class="band" id="ecommerce" aria-labelledby="ecTitle">
-    <div class="wrap">
-      <div class="chapter">
-        <h3 class="h2 chapter__kicker" id="ecTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span data-en="<span class=&quot;nw&quot;>E-commerce</span> &amp; campaigns"><span class="nw">E-commerce</span> y campañas</span></h3>
-        <p class="chapter__clients">Fellowes · Dahle · Sealy · Ourkisa</p>
-        <p class="body-2" data-en="Amazon and Mercado Libre listings, Hot Sale, Buen Fin and Q4 kits, and my own product photography. Hierarchy built for the purchase decision.">Fichas para Amazon y Mercado Libre, kits de Hot Sale, Buen Fin y Q4, y fotografía de producto propia. Jerarquía pensada para la decisión de compra.</p>
+    <div class="wrap split">
+      <div class="split__aside">
+        <h3 class="h2 chapter__kicker" id="ecTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="<span class=&quot;nw&quot;>E-commerce</span> &amp; campaigns"><span class="nw">E-commerce</span> y campañas</span></h3>
+        <p class="chapter__clients" data-reveal>Fellowes · Dahle · Sealy · Ourkisa</p>
+        <p class="body-2" style="margin-top: 16px" data-reveal data-en="Hundreds of pieces for 100+ products that look alike. Each one has to be understood as a thumbnail, on a phone, in a second.">Cientos de piezas para más de 100 productos que se parecen entre sí. Cada una tiene que entenderse en miniatura, en el teléfono, en un segundo.</p>
+        <ol class="process">
+          <li data-reveal><i>01</i><b data-en="Brief &amp; channel">Brief y canal</b><span data-en="Marketplace, site, social or email. Each channel reads differently.">Marketplace, sitio, redes o email. Cada canal se lee distinto.</span></li>
+          <li data-reveal><i>02</i><b data-en="Product photography">Fotografía de producto</b><span data-en="My own shots, retouching and compositing.">Fotografía propia, retoque y fotomontaje.</span></li>
+          <li data-reveal><i>03</i><b data-en="Hierarchy in 7 zones">Jerarquía en 7 zonas</b><span data-en="Model first: it is what survives as a thumbnail.">El modelo primero: es lo que sobrevive en miniatura.</span></li>
+          <li data-reveal><i>04</i><b data-en="Templates per brand">Plantillas por marca</b><span data-en="Same structure, a different tone for each brand.">Misma estructura, un tono distinto por marca.</span></li>
+          <li data-reveal><i>05</i><b data-en="Seasonal kits">Kits de temporada</b><span data-en="Hot Sale, Buen Fin and Q4 in 4:5, 16:9 and 9:16.">Hot Sale, Buen Fin y Q4 en 4:5, 16:9 y 9:16.</span></li>
+          <li data-reveal><i>06</i><b data-en="Publishing">Publicación</b><span data-en="Amazon, Mercado Libre, site, social and email.">Amazon, Mercado Libre, sitio, redes y email.</span></li>
+        </ol>
+        <div class="aside-ctas" data-reveal>
+          <a class="btn btn--ghost" href="casos/fellowes-dahle.html"><span data-en="Read the case study">Leer el caso de estudio</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+          <button class="link-u more-link" type="button" data-lb-open="ecom" data-lb-index="0" data-en="See every piece">Ver todas las piezas</button>
+        </div>
       </div>
-      <div class="lead-figure crop" data-crop>
-        <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span><span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
-        <figure data-mask><button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Día del Maestro"><img src="assets/img/ecom/fellowes_dia_maestro.jpg" width="1600" height="900" loading="lazy" alt="Campaña Fellowes Día del Maestro"></button></figure>
-      </div>
-      <div class="mosaic">
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel" data-reveal><img src="assets/img/ecom/sealy_crown_jewel.jpg" width="757" height="951" loading="lazy" alt="Pieza Sealy Crown Jewel"><span class="tile__cap">Sealy · Crown Jewel</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Black Friday" data-reveal><img src="assets/img/ecom/fellowes_black_friday.jpg" width="759" height="891" loading="lazy" alt="Campaña Fellowes Black Friday"><span class="tile__cap">Fellowes · Black Friday</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Benito Juárez" data-reveal><img src="assets/img/ecom/ourkisa_benito_juarez.jpg" width="760" height="952" loading="lazy" alt="Campaña inmobiliaria Ourkisa Benito Juárez"><span class="tile__cap">Ourkisa · Benito Juárez</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · Vantage 18" data-reveal><img src="assets/img/ecom/dahle_vantage18.jpg" width="800" height="1000" loading="lazy" alt="Ficha Dahle Vantage 18"><span class="tile__cap">Dahle · Vantage 18</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Posturepedic" data-reveal><img src="assets/img/ecom/sealy_posturepedic.jpg" width="763" height="764" loading="lazy" alt="Pieza Sealy Posturepedic"><span class="tile__cap">Sealy · Posturepedic</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Venus 125" data-reveal><img src="assets/img/ecom/fellowes_venus125_navidad.jpg" width="759" height="944" loading="lazy" alt="Campaña navideña Fellowes Venus 125"><span class="tile__cap" data-en="Fellowes · Holiday">Fellowes · Navidad</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, capas" data-reveal><img src="assets/img/ecom/sealy_cj_capas.jpg" width="833" height="1000" loading="lazy" alt="Ficha de capas Sealy Crown Jewel"><span class="tile__cap" data-en="Sealy · Layers">Sealy · Capas</span></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Fogata" data-reveal><img src="assets/img/ecom/ourkisa_fogata.jpg" width="754" height="938" loading="lazy" alt="Campaña Ourkisa"><span class="tile__cap">Ourkisa</span></button>
-      </div>
-      <div hidden>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Pulsar 300"><img data-src="assets/img/ecom/fellowes_pulsar300.jpg" alt="Fellowes Pulsar 300"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · 99Ci"><img data-src="assets/img/ecom/fellowes_99ci.jpg" alt="Fellowes 99Ci"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · LX200"><img data-src="assets/img/ecom/fellowes_lx200.jpg" alt="Fellowes LX200"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Seguridad"><img data-src="assets/img/ecom/fellowes_seguridad.jpg" alt="Fellowes seguridad"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · Shredmatic SM90"><img data-src="assets/img/ecom/dahle_shredmatic_sm90.jpg" alt="Dahle Shredmatic SM90"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · PaperSafe 380"><img data-src="assets/img/ecom/dahle_papersafe380.jpg" alt="Dahle PaperSafe 380"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · Datos"><img data-src="assets/img/ecom/dahle_datos.jpg" alt="Dahle ficha de datos"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, iconos"><img data-src="assets/img/ecom/sealy_cj_iconos.jpg" alt="Sealy Crown Jewel iconos"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, medidas"><img data-src="assets/img/ecom/sealy_cj_medidas.jpg" alt="Sealy Crown Jewel medidas"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Imperial, capas"><img data-src="assets/img/ecom/sealy_imperial_capas.jpg" alt="Sealy Imperial capas"></button>
-        <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Día de las Madres"><img data-src="assets/img/ecom/ourkisa_dia_madres.jpg" alt="Ourkisa Día de las Madres"></button>
-      </div>
-      <div class="more-row">
-        <a class="btn btn--ghost" href="casos/fellowes-dahle.html"><span data-en="Case study: Fellowes &amp; Dahle">Caso de estudio: Fellowes y Dahle</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
-        <p class="body-2" data-en="Around 10 vertical 9:16 videos a month as well. See them in Video.">También unos 10 videos verticales 9:16 al mes. Están en la sección de video.</p>
-        <button class="btn btn--ghost" type="button" data-lb-open="ecom" data-lb-index="9"><span data-en="All 20 pieces">Ver las 20 piezas</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+      <div>
+        <section class="sys" aria-labelledby="fdTitle">
+          <div class="sys__head" data-reveal><h4 class="h3" id="fdTitle">Fellowes · Dahle</h4><span class="label">ACGO Brands</span></div>
+          <div class="sys__grid sys__grid--ecom">
+            <button class="tile tile--wide" type="button" data-lb="ecom" data-cap="Fellowes · Día del Maestro" data-reveal><img src="assets/img/ecom/fellowes_dia_maestro.jpg" width="1600" height="900" loading="lazy" alt="Campaña Fellowes Día del Maestro"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Black Friday" data-reveal><img src="assets/img/ecom/fellowes_black_friday.jpg" width="759" height="891" loading="lazy" alt="Campaña Fellowes Black Friday"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Venus 125, Navidad" data-reveal><img src="assets/img/ecom/fellowes_venus125_navidad.jpg" width="759" height="944" loading="lazy" alt="Campaña navideña Fellowes Venus 125"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Pulsar +300" data-reveal><img src="assets/img/ecom/fellowes_pulsar300.jpg" width="766" height="957" loading="lazy" alt="Fellowes Pulsar +300"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · ShredMATIC SM 90" data-reveal><img src="assets/img/ecom/dahle_shredmatic_sm90.jpg" width="759" height="949" loading="lazy" alt="Dahle ShredMATIC SM 90"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · Vantage 18" data-reveal><img src="assets/img/ecom/dahle_vantage18.jpg" width="800" height="1000" loading="lazy" alt="Dahle Vantage 18"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · PaperSafe 380" data-reveal><img src="assets/img/ecom/dahle_papersafe380.jpg" width="800" height="1000" loading="lazy" alt="Dahle PaperSafe 380"></button>
+          </div>
+        </section>
+        <section class="sys" aria-labelledby="slTitle">
+          <div class="sys__head" data-reveal><h4 class="h3" id="slTitle">Sealy</h4><span class="label" data-en="Product photography · e-commerce">Fotografía · e-commerce</span></div>
+          <div class="sys__grid sys__grid--ecom">
+            <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel" data-reveal><img src="assets/img/ecom/sealy_crown_jewel.jpg" width="757" height="951" loading="lazy" alt="Sealy Crown Jewel"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, capas" data-reveal><img src="assets/img/ecom/sealy_cj_capas.jpg" width="833" height="1000" loading="lazy" alt="Sealy Crown Jewel, capas"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Imperial, capas" data-reveal><img src="assets/img/ecom/sealy_imperial_capas.jpg" width="833" height="1000" loading="lazy" alt="Sealy Imperial, capas"></button>
+          </div>
+        </section>
+        <section class="sys" aria-labelledby="okTitle">
+          <div class="sys__head" data-reveal><h4 class="h3" id="okTitle">Ourkisa</h4><span class="label" data-en="Real estate · B2B and B2C">Inmobiliaria · B2B y B2C</span></div>
+          <div class="sys__grid sys__grid--ecom">
+            <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Benito Juárez" data-reveal><img src="assets/img/ecom/ourkisa_benito_juarez.jpg" width="760" height="952" loading="lazy" alt="Campaña Ourkisa Benito Juárez"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Día de las Madres" data-reveal><img src="assets/img/ecom/ourkisa_dia_madres.jpg" width="758" height="949" loading="lazy" alt="Campaña Ourkisa Día de las Madres"></button>
+            <button class="tile" type="button" data-lb="ecom" data-cap="Ourkisa · Fogata" data-reveal><img src="assets/img/ecom/ourkisa_fogata.jpg" width="754" height="938" loading="lazy" alt="Campaña Ourkisa"></button>
+          </div>
+        </section>
+        <div hidden>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Posturepedic"><img data-src="assets/img/ecom/sealy_posturepedic.jpg" alt="Sealy Posturepedic"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, iconos"><img data-src="assets/img/ecom/sealy_cj_iconos.jpg" alt="Sealy Crown Jewel iconos"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Sealy · Crown Jewel, medidas"><img data-src="assets/img/ecom/sealy_cj_medidas.jpg" alt="Sealy Crown Jewel medidas"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · 99Ci"><img data-src="assets/img/ecom/fellowes_99ci.jpg" alt="Fellowes 99Ci"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · LX200"><img data-src="assets/img/ecom/fellowes_lx200.jpg" alt="Fellowes LX200"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Fellowes · Seguridad"><img data-src="assets/img/ecom/fellowes_seguridad.jpg" alt="Fellowes seguridad"></button>
+          <button class="tile" type="button" data-lb="ecom" data-cap="Dahle · Datos"><img data-src="assets/img/ecom/dahle_datos.jpg" alt="Dahle ficha de datos"></button>
+        </div>
       </div>
     </div>
   </article>
@@ -286,20 +367,20 @@
   <article class="band band--alt" id="ia" aria-labelledby="aiTitle">
     <div class="wrap split">
       <div class="split__aside">
-        <h3 class="h2 chapter__kicker" id="aiTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span data-en="AI product imagery">Imagen de producto con IA</span></h3>
-        <p class="body-2" style="margin-top: 16px" data-en="AI generates, direction decides. Full systems per product, from the hero scene to the dimensions card, ready for e-commerce.">La IA genera, la dirección decide. Sistemas completos por producto, de la escena principal a la ficha de medidas, listos para e-commerce.</p>
+        <h3 class="h2 chapter__kicker" id="aiTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="AI product imagery">Imagen de producto con IA</span></h3>
+        <p class="body-2" style="margin-top: 16px" data-reveal data-en="AI generates, direction decides. Full systems per product, from the hero scene to the dimensions card, ready for e-commerce.">La IA genera, la dirección decide. Sistemas completos por producto, de la escena principal a la ficha de medidas, listos para e-commerce.</p>
         <ol class="process">
-          <li><i>01</i><b>Brief</b><span data-en="Product, channel, buyer and what each image has to prove.">Producto, canal, comprador y qué debe demostrar cada imagen.</span></li>
-          <li><i>02</i><b>Prompts</b><span data-en="Scenes, light and angles written as a shot list.">Escenas, luz y ángulos escritos como lista de tomas.</span></li>
-          <li><i>03</i><b data-en="Generation">Generación</b><span>Midjourney, Firefly, Runway.</span></li>
-          <li><i>04</i><b data-en="Art direction">Dirección de arte</b><span data-en="Selection by consistency, not by luck.">Selección por consistencia, no por suerte.</span></li>
-          <li><i>05</i><b data-en="Retouch &amp; compositing">Retoque y composición</b><span data-en="The real product, exact, inside the scene.">El producto real, exacto, dentro de la escena.</span></li>
-          <li><i>06</i><b data-en="Final asset">Pieza final</b><span data-en="Hero, lifestyle, features, safety and dimensions.">Principal, lifestyle, funciones, seguridad y medidas.</span></li>
+          <li data-reveal><i>01</i><b>Brief</b><span data-en="Product, channel, buyer and what each image has to prove.">Producto, canal, comprador y qué debe demostrar cada imagen.</span></li>
+          <li data-reveal><i>02</i><b>Prompts</b><span data-en="Scenes, light and angles written as a shot list.">Escenas, luz y ángulos escritos como lista de tomas.</span></li>
+          <li data-reveal><i>03</i><b data-en="Generation">Generación</b><span>Midjourney, Firefly, Runway.</span></li>
+          <li data-reveal><i>04</i><b data-en="Art direction">Dirección de arte</b><span data-en="Selection by consistency, not by luck.">Selección por consistencia, no por suerte.</span></li>
+          <li data-reveal><i>05</i><b data-en="Retouch &amp; compositing">Retoque y composición</b><span data-en="The real product, exact, inside the scene.">El producto real, exacto, dentro de la escena.</span></li>
+          <li data-reveal><i>06</i><b data-en="Final asset">Pieza final</b><span data-en="Hero, lifestyle, features, safety and dimensions.">Principal, lifestyle, funciones, seguridad y medidas.</span></li>
         </ol>
       </div>
       <div>
         <section class="sys" aria-labelledby="ninTitle">
-          <div class="sys__head"><h4 class="h3" id="ninTitle">Ninino</h4><span class="label" data-en="High chair · 9 pieces">Silla alta · 9 piezas</span></div>
+          <div class="sys__head" data-reveal><h4 class="h3" id="ninTitle">Ninino</h4><span class="label" data-en="High chair · 9 pieces">Silla alta · 9 piezas</span></div>
           <div class="sys__grid">
             <button class="tile" type="button" data-lb="ninino" data-cap="Ninino · Contexto" data-reveal><img src="assets/img/ai/ninino-01-contexto.jpg" width="1100" height="1100" loading="lazy" alt="Silla alta Ninino en escena de cocina"></button>
             <button class="tile" type="button" data-lb="ninino" data-cap="Ninino · Ajuste" data-reveal><img src="assets/img/ai/ninino-02-ajuste.jpg" width="1100" height="1100" loading="lazy" alt="Ninino ajuste"></button>
@@ -313,7 +394,7 @@
           </div>
         </section>
         <section class="sys" aria-labelledby="poloTitle">
-          <div class="sys__head"><h4 class="h3" id="poloTitle">Polo Retro</h4><span class="label" data-en="Handbags · 8 pieces">Bolsas · 8 piezas</span></div>
+          <div class="sys__head" data-reveal><h4 class="h3" id="poloTitle">Polo Retro</h4><span class="label" data-en="Handbags · 8 pieces">Bolsas · 8 piezas</span></div>
           <div class="sys__grid sys__grid--polo">
             <button class="tile" type="button" data-lb="polo" data-cap="Polo Retro · Principal" data-reveal><img src="assets/img/ai/polo-01-principal.jpg" width="1080" height="1350" loading="lazy" alt="Bolsa Polo Retro negra, foto principal"></button>
             <button class="tile" type="button" data-lb="polo" data-cap="Polo Retro · Lifestyle" data-reveal><img src="assets/img/ai/polo-02-lifestyle.jpg" width="1080" height="1350" loading="lazy" alt="Polo Retro lifestyle"></button>
@@ -333,31 +414,37 @@
   <article class="band" id="impresos" aria-labelledby="prTitle">
     <div class="wrap">
       <div class="chapter">
-        <h3 class="h2 chapter__kicker" id="prTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span data-en="Print &amp; packaging">Impresos y packaging</span></h3>
-        <p class="chapter__clients">Carnivorus do Brasil · Wonder Maka · TMEXA</p>
+        <h3 class="h2 chapter__kicker" id="prTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="Print &amp; packaging">Impresos y packaging</span></h3>
+        <p class="chapter__clients" data-reveal>Carnivorus do Brasil · Wonder Maka</p>
       </div>
-      <div class="editorial">
-        <div class="e-a crop" data-crop>
+      <div class="print">
+        <div class="print__hero crop" data-reveal>
           <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span><span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
-          <figure data-mask><button class="tile" type="button" data-lb="print" data-cap="Carnivorus do Brasil · Salami"><img src="assets/img/print/carnivorus-salami.webp" width="1122" height="1402" loading="lazy" alt="Etiqueta Carnivorus do Brasil para salami"></button></figure>
+          <button class="tile" type="button" data-lb="print" data-cap="Carnivorus do Brasil · Salami cervecero"><img src="assets/img/print/carnivorus-salami.webp" width="1122" height="1402" loading="lazy" alt="Empaque de salami cervecero Carnivorus do Brasil"></button>
         </div>
-        <button class="tile e-b" type="button" data-lb="print" data-cap="Wonder Maka · Caja" data-reveal><img src="assets/img/print/wonder-maka.webp" width="940" height="1215" loading="lazy" alt="Caja negra Wonder Maka con cápsulas azules"><span class="tile__cap" data-en="Wonder Maka · Box">Wonder Maka · Caja</span></button>
-        <div class="e-txt" data-reveal>
-          <p class="lead" data-en="Labels, boxes and stationery with clear hierarchy and print-ready files.">Etiquetas, cajas y papelería con jerarquía clara y archivos listos para imprenta.</p>
-          <p class="body-2" data-en="Prepress is not the last step here, it is part of the design.">Aquí la preprensa no es el último paso, es parte del diseño.</p>
+        <div class="print__text">
+          <h4 class="h3" data-reveal data-en="One label, five products">Una etiqueta, cinco productos</h4>
+          <p class="body-2" data-reveal data-en="A label family for Carnivorus do Brasil: one structure, a colour per product, warning seals and nutrition table in their place, and print-ready files.">Familia de etiquetas para Carnivorus do Brasil: una sola estructura, un color por producto, sellos de advertencia y tabla nutrimental en su lugar, y archivos listos para imprenta.</p>
+          <button class="tile print__flat" type="button" data-lb="print" data-cap="Carnivorus · Etiqueta salami, extendida" data-reveal><img src="assets/img/print/carnivorus_etiqueta_salami.jpg" width="1400" height="700" loading="lazy" alt="Etiqueta extendida del salami cervecero"></button>
+          <p class="print__note" data-reveal data-en="Prepress is not the last step here, it is part of the design.">Aquí la preprensa no es el último paso, es parte del diseño.</p>
         </div>
-        <button class="tile e-wide" type="button" data-lb="print" data-cap="TMEXA · Folder interior" data-reveal><img src="assets/img/print/tmexa_folder_interior.jpg" width="1900" height="820" loading="lazy" alt="Interior del folder corporativo TMEXA"><span class="tile__cap" data-en="TMEXA · Corporate folder">TMEXA · Folder corporativo</span></button>
-        <button class="tile e-half" type="button" data-lb="print" data-cap="TMEXA · Tarjeta" data-reveal><img src="assets/img/print/tmexa_tarjeta_frente.jpg" width="389" height="700" loading="lazy" alt="Tarjeta de presentación TMEXA"><span class="tile__cap" data-en="Business card">Tarjeta</span></button>
-        <button class="tile e-half" type="button" data-lb="print" data-cap="Carnivorus · Carta" data-reveal><img src="assets/img/print/carnivorus_carta_p1.jpg" width="850" height="1100" loading="lazy" alt="Carta de Carnivorus do Brasil"><span class="tile__cap" data-en="Menu">Carta</span></button>
+      </div>
+      <ul class="print__family" aria-label="Familia de etiquetas" data-en-aria-label="Label family">
+        <li data-reveal><button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Chorizo brasileño"><img src="assets/img/print/carnivorus-chorizo-thumb.webp" width="350" height="437" loading="lazy" alt="Chorizo brasileño"></button><span>Chorizo</span></li>
+        <li data-reveal><button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Coppa madurata"><img src="assets/img/print/carnivorus-coppa-thumb.webp" width="350" height="437" loading="lazy" alt="Coppa madurata"></button><span>Coppa</span></li>
+        <li data-reveal><button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Fiambre de pechuga de pollo"><img src="assets/img/print/carnivorus-fiambre-thumb.webp" width="350" height="437" loading="lazy" alt="Fiambre de pechuga de pollo"></button><span data-en="Chicken breast">Fiambre</span></li>
+        <li data-reveal><button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Lomo madurado"><img src="assets/img/print/carnivorus-lomo-thumb.webp" width="350" height="437" loading="lazy" alt="Lomo madurado"></button><span data-en="Cured loin">Lomo</span></li>
+        <li data-reveal><button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Salami cervecero"><img src="assets/img/print/carnivorus-salami-thumb.webp" width="350" height="437" loading="lazy" alt="Salami cervecero"></button><span>Salami</span></li>
+      </ul>
+      <div class="print__wm">
+        <button class="tile" type="button" data-lb="print" data-cap="Wonder Maka · Caja" data-reveal><img src="assets/img/print/wonder-maka.webp" width="940" height="1215" loading="lazy" alt="Caja negra Wonder Maka con cápsulas azules"></button>
+        <div data-reveal>
+          <h4 class="h3">Wonder Maka</h4>
+          <p class="body-2" style="margin-top: 12px" data-en="Box for a natural supplement: black base and a single electric blue that matches the capsules, so the product reads as one piece on the shelf.">Caja para un suplemento natural: base negra y un solo azul eléctrico que coincide con las cápsulas, para que el producto se lea como una sola pieza en anaquel.</p>
+        </div>
       </div>
       <div hidden>
-        <button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Etiqueta salami"><img data-src="assets/img/print/carnivorus_etiqueta_salami.jpg" alt="Etiqueta salami extendida"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Etiqueta fiambre"><img data-src="assets/img/print/carnivorus_etiqueta_fiambre.jpg" alt="Etiqueta fiambre extendida"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Carta p. 2"><img data-src="assets/img/print/carnivorus_carta_p2.jpg" alt="Carta página 2"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Carta p. 3"><img data-src="assets/img/print/carnivorus_carta_p3.jpg" alt="Carta página 3"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="TMEXA · Folder exterior"><img data-src="assets/img/print/tmexa_folder_exterior.jpg" alt="Folder TMEXA exterior"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="TMEXA · Hoja membretada"><img data-src="assets/img/print/tmexa_hoja_membretada.jpg" alt="Hoja membretada TMEXA"></button>
-        <button class="tile" type="button" data-lb="print" data-cap="TMEXA · Tarjeta reverso"><img data-src="assets/img/print/tmexa_tarjeta_vuelta.jpg" alt="Tarjeta TMEXA reverso"></button>
+        <button class="tile" type="button" data-lb="print" data-cap="Carnivorus · Etiqueta fiambre, extendida"><img data-src="assets/img/print/carnivorus_etiqueta_fiambre.jpg" alt="Etiqueta fiambre extendida"></button>
       </div>
     </div>
   </article>
@@ -366,27 +453,44 @@
   <article class="band band--alt" id="web" aria-labelledby="webTitle">
     <div class="wrap">
       <div class="chapter">
-        <h3 class="h2 chapter__kicker" id="webTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span data-en="Web design">Diseño web</span></h3>
-        <p class="body-2" data-en="Brand sites designed and built end to end. Live, not mockups.">Sitios de marca diseñados y construidos de punta a punta. En línea, no maquetas.</p>
+        <h3 class="h2 chapter__kicker" id="webTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span data-en="Web design">Diseño web</span></h3>
+        <p class="body-2" data-reveal data-en="Brand sites designed and built end to end. Live, not mockups.">Sitios de marca diseñados y construidos de punta a punta. En línea, no maquetas.</p>
       </div>
-      <div class="sites">
-        <a class="site" href="https://www.stearnsandfoster.com.mx" target="_blank" rel="noopener" data-reveal>
-          <div class="site__shot"><img src="assets/img/web/web-stearns.jpg" width="2049" height="1136" loading="lazy" alt="Sitio web Stearns &amp; Foster México"></div>
-          <div class="site__row"><span class="h3">Stearns &amp; Foster</span><span class="site__url">stearnsandfoster.com.mx <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span></div>
-          <p class="body-2" data-en="Tempur Sealy. Premium mattress brand site.">Tempur Sealy. Sitio de marca de colchones premium.</p>
-        </a>
-        <a class="site" href="https://ninino.mx" target="_blank" rel="noopener" data-reveal>
-          <div class="site__shot"><img src="assets/img/web/web-ninino.webp" width="960" height="960" loading="lazy" alt="Sitio web Ninino"></div>
-          <div class="site__row"><span class="h3">Ninino</span><span class="site__url">ninino.mx <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span></div>
-          <p class="body-2" data-en="Design and build. Children's products.">Diseño y desarrollo. Productos para bebé.</p>
-        </a>
-        <a class="site" href="https://jfstudio-mx.github.io/otrojosh/" target="_blank" rel="noopener" data-reveal>
-          <div class="site__shot"><img src="assets/img/web/web-otrojosh.jpg" width="1100" height="1100" loading="lazy" alt="Sitio web Otro Josh"></div>
-          <div class="site__row"><span class="h3">Otro Josh</span><span class="site__url" data-en-html="Music project <svg class=&quot;icon&quot; aria-hidden=&quot;true&quot;><use href=&quot;#i-arrow-up-right&quot;/></svg>">Proyecto musical <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span></div>
-          <p class="body-2" data-en="My own music project. Identity, site and releases.">Mi proyecto musical propio. Identidad, sitio y lanzamientos.</p>
-        </a>
+      <div class="slides" id="slides" role="region" aria-roledescription="carrusel" aria-label="Sitios web" data-en-aria-label="Websites" data-reveal>
+        <div class="slides__view">
+          <a class="slide is-active" href="https://www.stearnsandfoster.com.mx" target="_blank" rel="noopener" aria-label="Stearns &amp; Foster México, abrir sitio" data-en-aria-label="Stearns &amp; Foster Mexico, open site"><img src="assets/img/web/site-stearns.jpg" width="1600" height="1000" loading="lazy" alt="Página de inicio de Stearns &amp; Foster México"></a>
+          <a class="slide" href="https://ninino.mx" target="_blank" rel="noopener" aria-label="Ninino, abrir sitio" data-en-aria-label="Ninino, open site"><img src="assets/img/web/site-ninino.jpg" width="1600" height="1000" loading="lazy" alt="Página de inicio de Ninino"></a>
+          <a class="slide" href="https://jfstudio-mx.github.io/otrojosh/" target="_blank" rel="noopener" aria-label="Otro Josh, abrir sitio" data-en-aria-label="Otro Josh, open site"><img src="assets/img/web/site-otrojosh.jpg" width="1600" height="1000" loading="lazy" alt="Página de inicio de Otro Josh"></a>
+        </div>
+        <div class="slides__ui">
+          <div class="slides__info" aria-live="polite">
+            <div class="slide-info is-active">
+              <p class="h3">Stearns &amp; Foster</p>
+              <p class="body-2" data-en="Tempur Sealy. Premium mattress brand site.">Tempur Sealy. Sitio de marca de colchones premium.</p>
+              <a class="site__url" href="https://www.stearnsandfoster.com.mx" target="_blank" rel="noopener">stearnsandfoster.com.mx <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+            </div>
+            <div class="slide-info">
+              <p class="h3">Ninino</p>
+              <p class="body-2" data-en="Design and build. Products for every stage of childhood.">Diseño y desarrollo. Productos para cada etapa de la infancia.</p>
+              <a class="site__url" href="https://ninino.mx" target="_blank" rel="noopener">ninino.mx <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+            </div>
+            <div class="slide-info">
+              <p class="h3">Otro Josh</p>
+              <p class="body-2" data-en="My own music project. Identity, site and album launch.">Mi proyecto musical. Identidad, sitio y lanzamiento del álbum.</p>
+              <span class="slide-info__links">
+                <a class="site__url" href="https://jfstudio-mx.github.io/otrojosh/" target="_blank" rel="noopener"><span data-en="Live site">Sitio en vivo</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+                <a class="site__url" href="casos/otro-josh.html"><span data-en="Case study">Caso de estudio</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+              </span>
+            </div>
+          </div>
+          <div class="slides__ctrl">
+            <div class="slides__bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></div>
+            <span class="slides__count tnum" aria-hidden="true">01 / 03</span>
+            <button class="pan__btn" type="button" data-slide="-1" aria-label="Sitio anterior" data-en-aria-label="Previous site"><svg class="icon" aria-hidden="true"><use href="#i-caret-left"/></svg></button>
+            <button class="pan__btn" type="button" data-slide="1" aria-label="Siguiente sitio" data-en-aria-label="Next site"><svg class="icon" aria-hidden="true"><use href="#i-caret-right"/></svg></button>
+          </div>
+        </div>
       </div>
-      <div class="more-row" style="margin-top: 40px"><a class="btn btn--ghost" href="casos/otro-josh.html"><span data-en="Case study: Otro Josh">Caso de estudio: Otro Josh</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a></div>
     </div>
   </article>
 
@@ -394,9 +498,9 @@
   <article class="band band--tight" id="liga" aria-labelledby="lgTitle">
     <div class="wrap league">
       <div>
-        <h3 class="h2 chapter__kicker" id="lgTitle" style="color: var(--text)"><span class="reg" aria-hidden="true" style="color: var(--accent)"><i></i></span><span>Liga ADB Chile</span></h3>
-        <p class="body-2" style="margin-top: 16px" data-en="Weekly art direction for a 5-division football league: fixtures, announcements and staff. An automated Excel to Illustrator workflow turns each matchday's data into publishable pieces.">Dirección visual semanal de una liga de fútbol de 5 divisiones: fixtures, informativos y staff. Un flujo automatizado de Excel a Illustrator convierte los datos de cada jornada en piezas publicables.</p>
-        <a class="btn btn--ghost case-link" href="casos/liga-adb.html" style="margin-top: 24px"><span data-en="Read the case study">Leer el caso de estudio</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+        <h3 class="h2 chapter__kicker" id="lgTitle" data-reveal><span class="reg" aria-hidden="true"><i></i></span><span>Liga ADB Chile</span></h3>
+        <p class="body-2" style="margin-top: 16px" data-reveal data-en="Weekly art direction for a 5-division football league: fixtures, announcements and staff. An automated Excel to Illustrator workflow turns each matchday's data into publishable pieces.">Dirección visual semanal de una liga de fútbol de 5 divisiones: fixtures, informativos y staff. Un flujo automatizado de Excel a Illustrator convierte los datos de cada jornada en piezas publicables.</p>
+        <a class="btn btn--ghost" href="casos/liga-adb.html" style="margin-top: 24px" data-reveal><span data-en="Read the case study">Leer el caso de estudio</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
       </div>
       <div>
         <div class="league__figs">
@@ -404,10 +508,10 @@
           <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Informativo" data-reveal><img src="assets/img/league/ligaadb_informativo.jpg" width="864" height="1080" loading="lazy" alt="Informativo Liga ADB"></button>
         </div>
         <div class="league__staff">
-          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff"><img src="assets/img/league/ligaadb_staff_1.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
-          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff"><img src="assets/img/league/ligaadb_staff_2.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
-          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff"><img src="assets/img/league/ligaadb_staff_3.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
-          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff"><img src="assets/img/league/ligaadb_staff_4.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
+          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff" data-reveal><img src="assets/img/league/ligaadb_staff_1.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
+          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff" data-reveal><img src="assets/img/league/ligaadb_staff_2.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
+          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff" data-reveal><img src="assets/img/league/ligaadb_staff_3.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
+          <button class="tile" type="button" data-lb="liga" data-cap="Liga ADB · Staff" data-reveal><img src="assets/img/league/ligaadb_staff_4.jpg" width="700" height="440" loading="lazy" alt="Staff Liga ADB"></button>
         </div>
       </div>
     </div>
@@ -420,19 +524,12 @@
     <h2 class="h2" id="vidTitle" data-reveal data-en="Video &amp; motion">Video y motion</h2>
     <p class="lead" data-reveal data-en="Vertical reels, product clips and tutorials. Around 10 a month for brands.">Reels verticales, clips de producto y tutoriales. Unos 10 al mes para marcas.</p>
   </div>
-  <div class="reels">
-    <div class="reel reel--yt">
-      <button class="yt" type="button" data-yt="42ODtcfYjFI" aria-label="Reproducir video de YouTube" data-en-aria-label="Play YouTube video">
-        <img src="https://i.ytimg.com/vi/42ODtcfYjFI/maxresdefault.jpg" width="1280" height="720" loading="lazy" alt="">
-        <span class="yt__play"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
-      </button>
-      <div class="reel__cap"><span>YouTube</span><span data-en="Vertical video">Video vertical</span></div>
-    </div>
-    <div class="reel"><iframe src="https://www.instagram.com/p/DH8zro2vhpX/embed/" loading="lazy" title="Reel 1" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
-    <div class="reel"><iframe src="https://www.instagram.com/p/DJNmIO3v8lz/embed/" loading="lazy" title="Reel 2" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
-    <div class="reel"><iframe src="https://www.instagram.com/p/DKaGdCuKX-E/embed/" loading="lazy" title="Reel 3" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
-    <div class="reel"><iframe src="https://www.instagram.com/p/DNjCLyBCUtk/embed/" loading="lazy" title="Reel 4" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
-    <div class="reel"><iframe src="https://www.instagram.com/p/DSEiiRejsYl/embed/" loading="lazy" title="Reel 5" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
+  <div class="reels" data-lenis-prevent-horizontal>
+    <div class="reel" data-reveal><iframe src="https://www.instagram.com/p/DH8zro2vhpX/embed/" loading="lazy" title="Reel 1" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
+    <div class="reel" data-reveal><iframe src="https://www.instagram.com/p/DJNmIO3v8lz/embed/" loading="lazy" title="Reel 2" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
+    <div class="reel" data-reveal><iframe src="https://www.instagram.com/p/DKaGdCuKX-E/embed/" loading="lazy" title="Reel 3" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
+    <div class="reel" data-reveal><iframe src="https://www.instagram.com/p/DNjCLyBCUtk/embed/" loading="lazy" title="Reel 4" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
+    <div class="reel" data-reveal><iframe src="https://www.instagram.com/p/DSEiiRejsYl/embed/" loading="lazy" title="Reel 5" allowtransparency="true" allowfullscreen scrolling="no"></iframe></div>
   </div>
 </section>
 
@@ -448,25 +545,26 @@
         <h3 class="svc__t" data-en="AI product imagery">Imagen de producto con IA</h3>
         <p class="svc__d" data-en="Scenes, lifestyle and full listing sets for your catalogue, directed and retouched by hand.">Escenas, lifestyle y fichas completas para tu catálogo, dirigidas y retocadas a mano.</p>
         <ul class="svc__tags"><li>Amazon</li><li>Mercado Libre</li><li data-en="Systems per SKU">Sistemas por SKU</li></ul>
-        <span class="svc__img" aria-hidden="true"><img src="assets/img/ai/polo-02-lifestyle.jpg" alt="" loading="lazy"></span>
       </li>
       <li class="svc" data-reveal>
         <h3 class="svc__t" data-en="Campaigns &amp; <span class=&quot;nw&quot;>e-commerce</span>">Campañas y <span class="nw">e-commerce</span></h3>
         <p class="svc__d" data-en="Kits for Hot Sale, Buen Fin and Q4. Banners, email, social and 9:16 video in one visual line.">Kits para Hot Sale, Buen Fin y Q4. Banners, email, redes y video 9:16 con una sola línea visual.</p>
         <ul class="svc__tags"><li data-en="Paid &amp; social">Paid y redes</li><li>Email</li><li data-en="9:16 video">Video 9:16</li></ul>
-        <span class="svc__img" aria-hidden="true"><img src="assets/img/ecom/fellowes_black_friday.jpg" alt="" loading="lazy"></span>
       </li>
       <li class="svc" data-reveal>
         <h3 class="svc__t" data-en="Large format &amp; events">Gran formato y eventos</h3>
         <p class="svc__d" data-en="Prepress, final files and on-site quality control for banners, vinyl and signage.">Preprensa, archivos finales y control de calidad en sitio para lonas, viniles y señalética.</p>
         <ul class="svc__tags"><li data-en="Prepress">Preprensa</li><li data-en="On-site QA">QA en sitio</li><li data-en="Multi-venue">Multi-sede</li></ul>
-        <span class="svc__img" aria-hidden="true"><img src="assets/img/events/fifa-2026-estadio-cdmx.jpg" alt="" loading="lazy"></span>
+      </li>
+      <li class="svc" data-reveal>
+        <h3 class="svc__t" data-en="Video &amp; motion">Video y motion</h3>
+        <p class="svc__d" data-en="Vertical reels, product clips and motion graphics for social and marketplaces.">Reels verticales, clips de producto y motion graphics para redes y marketplaces.</p>
+        <ul class="svc__tags"><li>Reels 9:16</li><li data-en="Product clips">Clips de producto</li><li>After Effects</li></ul>
       </li>
       <li class="svc" data-reveal>
         <h3 class="svc__t" data-en="Web design">Diseño web</h3>
         <p class="svc__d" data-en="Fast, bilingual brand sites, designed and built end to end.">Sitios de marca rápidos y bilingües, diseñados y construidos de punta a punta.</p>
         <ul class="svc__tags"><li data-en="Design">Diseño</li><li data-en="Build">Desarrollo</li><li>ES / EN</li></ul>
-        <span class="svc__img" aria-hidden="true"><img src="assets/img/web/web-stearns.jpg" alt="" loading="lazy"></span>
       </li>
     </ul>
   </div>
@@ -483,7 +581,7 @@
         <p class="job__when" data-en="May 2026 to Jun 2026">May 2026 a jun 2026</p>
         <div>
           <h3 class="job__role"><span data-en="On-site Prepress &amp; QC Lead">Responsable de Preprensa y Control de Calidad</span><span class="job__now" data-en="Latest">Más reciente</span></h3>
-          <p class="job__co" data-en-html="<b>Grupo Ideartte</b>, FIFA World Cup 2026 stadium signage. Mexico City Stadium, Zócalo Fan Fest, Atlanta, New York, Miami and Vancouver."><b>Grupo Ideartte</b>, señalización de estadios del Mundial FIFA 2026. Estadio Ciudad de México, Fan Fest Zócalo, Atlanta, Nueva York, Miami y Vancouver.</p>
+          <p class="job__co" data-en="<b>Grupo Ideartte</b>, FIFA World Cup 2026 stadium signage. Mexico City Stadium, Zócalo Fan Fest, Atlanta, New York, Miami and Vancouver."><b>Grupo Ideartte</b>, señalización de estadios del Mundial FIFA 2026. Estadio Ciudad de México, Fan Fest Zócalo, Atlanta, Nueva York, Miami y Vancouver.</p>
         </div>
         <p class="job__fig">5<small data-en="host cities">ciudades sede</small></p>
       </li>
@@ -491,7 +589,7 @@
         <p class="job__when" data-en="Aug 2025 to May 2026">Ago 2025 a may 2026</p>
         <div>
           <h3 class="job__role" data-en="Multimedia Designer · E-commerce">Diseñador Multimedia · E-commerce</h3>
-          <p class="job__co" data-en-html="<b>ACGO Brands</b>, visual lead for Fellowes and Dahle. Amazon and Mercado Libre listings, AI product scenes, campaign kits."><b>ACGO Brands</b>, líder visual de Fellowes y Dahle. Fichas en Amazon y Mercado Libre, escenas de producto con IA, kits de campaña.</p>
+          <p class="job__co" data-en="<b>ACGO Brands</b>, visual lead for Fellowes and Dahle. Amazon and Mercado Libre listings, AI product scenes, campaign kits."><b>ACGO Brands</b>, líder visual de Fellowes y Dahle. Fichas en Amazon y Mercado Libre, escenas de producto con IA, kits de campaña.</p>
         </div>
         <p class="job__fig">100+<small data-en="active SKUs">SKUs activos</small></p>
       </li>
@@ -499,7 +597,7 @@
         <p class="job__when" data-en="2024 to present">2024 a la fecha</p>
         <div>
           <h3 class="job__role" data-en="Creative Direction · AI · Web">Dirección Creativa · IA · Web</h3>
-          <p class="job__co" data-en-html="<b>JF Studio</b>, freelance. Ninino, Polo Retro, Liga ADB Chile and independent clients."><b>JF Studio</b>, freelance. Ninino, Polo Retro, Liga ADB Chile y clientes independientes.</p>
+          <p class="job__co" data-en="<b>JF Studio</b>, freelance. Ninino, Polo Retro, Liga ADB Chile and independent clients."><b>JF Studio</b>, freelance. Ninino, Polo Retro, Liga ADB Chile y clientes independientes.</p>
         </div>
         <p class="job__fig">5<small data-en="league divisions">divisiones de liga</small></p>
       </li>
@@ -507,7 +605,7 @@
         <p class="job__when" data-en="Feb 2025 to Jul 2025">Feb 2025 a jul 2025</p>
         <div>
           <h3 class="job__role" data-en="Graphic Designer · Marketing">Diseñador Gráfico · Marketing</h3>
-          <p class="job__co" data-en-html="<b>Ourkisa</b>, B2B and B2C real estate campaigns, social and executive presentations."><b>Ourkisa</b>, campañas inmobiliarias B2B y B2C, redes y presentaciones ejecutivas.</p>
+          <p class="job__co" data-en="<b>Ourkisa</b>, B2B and B2C real estate campaigns, social and executive presentations."><b>Ourkisa</b>, campañas inmobiliarias B2B y B2C, redes y presentaciones ejecutivas.</p>
         </div>
         <p class="job__fig">~30<small data-en="pieces a month">piezas al mes</small></p>
       </li>
@@ -515,7 +613,7 @@
         <p class="job__when" data-en="Jul 2024 to Mar 2025">Jul 2024 a mar 2025</p>
         <div>
           <h3 class="job__role" data-en="Prepress Lead · Graphic Designer">Encargado de Preprensa · Diseñador Gráfico</h3>
-          <p class="job__co" data-en-html="<b>Grupo Ideartte</b>, F1 Mexico, Formula E, NASCAR Mexico, EDC, Corona Capital and Flow Fest."><b>Grupo Ideartte</b>, F1 México, Formula E, NASCAR México, EDC, Corona Capital y Flow Fest.</p>
+          <p class="job__co" data-en="<b>Grupo Ideartte</b>, F1 Mexico, Formula E, NASCAR Mexico, EDC, Corona Capital and Flow Fest."><b>Grupo Ideartte</b>, F1 México, Formula E, NASCAR México, EDC, Corona Capital y Flow Fest.</p>
         </div>
         <p class="job__fig">~25<small data-en="projects a month">proyectos al mes</small></p>
       </li>
@@ -523,7 +621,7 @@
         <p class="job__when" data-en="Feb 2022 to Dec 2023">Feb 2022 a dic 2023</p>
         <div>
           <h3 class="job__role" data-en="Digital Designer · Product Photographer">Diseñador Digital · Fotógrafo de Producto</h3>
-          <p class="job__co" data-en-html="<b>Sealy México</b>, in-house product photography, retouching and compositing for the leading premium mattress brand."><b>Sealy México</b>, fotografía de producto in-house, retoque y fotomontaje para la marca líder de colchones premium.</p>
+          <p class="job__co" data-en="<b>Sealy México</b>, in-house product photography, retouching and compositing for the leading premium mattress brand."><b>Sealy México</b>, fotografía de producto in-house, retoque y fotomontaje para la marca líder de colchones premium.</p>
         </div>
         <p class="job__fig">~50<small data-en="pieces a month">piezas al mes</small></p>
       </li>
@@ -559,14 +657,14 @@
   <div class="wrap">
     <h2 class="display contact__title" id="ctTitle" data-reveal data-en="Let's make<br>something big.">¿Hacemos<br>algo grande?</h2>
     <div class="contact__grid">
-      <div style="display: grid; gap: 22px">
+      <div style="display: grid; gap: 22px" data-reveal>
         <div class="mail">
           <a href="mailto:joshy.design.mx@gmail.com" class="link-u">joshy.design.mx@gmail.com</a>
           <button class="copy-btn" type="button" id="copyMail" data-copy="joshy.design.mx@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-en="Copy">Copiar</span></button>
         </div>
         <p class="contact__note"><span class="status-dot" aria-hidden="true"></span><span data-en="Available for projects and roles. Mexico City, hybrid or remote.">Disponible para proyectos y puestos. Ciudad de México, híbrido o remoto.</span></p>
       </div>
-      <div class="contact__actions">
+      <div class="contact__actions" data-reveal>
         <a class="btn btn--primary" id="waLink" href="https://wa.me/525527130635?text=Hola%20Joshua%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20platicar%20de%20un%20proyecto." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"/></svg>WhatsApp</a>
         <a class="btn btn--ghost" href="https://www.linkedin.com/in/joshuafloresmx/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-linkedin-logo"/></svg>LinkedIn</a>
         <a class="btn btn--ghost" href="docs/Joshua_Flores_CV_ES.pdf" download><svg class="icon" aria-hidden="true"><use href="#i-download-simple"/></svg>CV ES</a>
@@ -582,14 +680,14 @@
   <div class="wrap footer__inner">
     <span>© 2026 Joshua Flores</span>
     <span style="display: flex; gap: 24px">
-      <button type="button" id="replayIntro" data-en="Replay intro">Ver intro de nuevo</button>
+      <button type="button" id="replayIntro" data-en="Watch trailer">Ver trailer</button>
       <a href="#top" data-en="Back to top">Volver arriba</a>
     </span>
   </div>
 </footer>
 
 <!-- ============ LIGHTBOX ============ -->
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de imágenes" data-en-aria-label="Image viewer">
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de imágenes" data-en-aria-label="Image viewer" data-lenis-prevent>
   <div class="lb__top">
     <span class="lb__count tnum" id="lbCount"></span>
     <button class="lb__btn" type="button" id="lbClose" aria-label="Cerrar" data-en-aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
@@ -606,6 +704,7 @@
 
 <script src="js/gsap.min.js" defer></script>
 <script src="js/ScrollTrigger.min.js" defer></script>
+<script src="js/lenis.min.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>
 </html>
