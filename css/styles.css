@@ -834,3 +834,93 @@ html { overflow-x: clip; }
 .wf--card:nth-of-type(10) { left: 66%; }
 .tv-cursor { position: absolute; width: clamp(22px, 2.6vw, 34px); height: clamp(22px, 2.6vw, 34px); fill: var(--text); z-index: 3; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
 @media (min-width: 900px) { .tv[data-scene="ecom"] .tv__title { max-width: 52vw; } .tv[data-scene="ecom"] .tv__title .display { font-size: clamp(2.1rem, 4.6vw, 4.2rem); } }
+
+/* ---------- Liga ADB: gráficos vectoriales ---------- */
+.lg-pipe { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: center; font-size: clamp(11px, 1vw, 13px); }
+.lg-xls, .lg-card, .lg-layers { border: 1px solid var(--line); background: var(--bg-2); }
+.lg-xls__bar, .lg-layers__bar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); color: var(--text-2); font-size: 11px; font-stretch: 85%; font-weight: 600; }
+.lg-xls__bar .tv-ico, .lg-layers__bar .tv-ico { font-size: 18px; color: #2fbf71; }
+.lg-layers__bar .tv-ico { color: var(--text); }
+.lg-xh, .lg-xr { display: grid; grid-template-columns: 1fr 1.6fr 1.6fr .8fr; }
+.lg-xh i { font-style: normal; font-size: 9px; font-stretch: 80%; font-weight: 700; letter-spacing: .1em; color: var(--text-2); padding: 6px 8px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.lg-c { display: flex; align-items: center; height: 26px; padding: 0 8px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); font-style: normal; font-variant-numeric: tabular-nums; color: var(--text); position: relative; }
+.lg-c b { display: block; height: 6px; width: 78%; background: var(--text-2); }
+.lg-c--s b { width: 50%; }
+.lg-c.is-hot { background: rgba(255, 59, 47, .18); outline: 1px solid var(--accent); outline-offset: -1px; }
+.lg-link { position: relative; height: 54px; display: grid; place-items: center; }
+.lg-link__line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.lg-link__dot { position: absolute; left: 50%; top: 0; width: 9px; height: 9px; margin-left: -4px; border-radius: 50%; background: var(--accent); }
+.lg-link__lbl { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); background: var(--bg); font-size: 11px; color: var(--text); }
+.lg-link__lbl .tv-ico { font-size: 15px; color: var(--accent); }
+.lg-card { padding: 14px; background: #120b0c; border-color: #3a1a1a; }
+.lg-card__head { display: grid; gap: 2px; margin-bottom: 10px; }
+.lg-card__head span { font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--accent); }
+.lg-card__head b { font-size: clamp(22px, 2.6vw, 34px); font-stretch: 125%; font-weight: 900; letter-spacing: -.02em; line-height: 1; }
+.lg-card__head small { font-size: 10px; letter-spacing: .12em; color: var(--text-2); font-weight: 600; }
+.lg-fr { display: grid; grid-template-columns: 44px 1fr 22px 1fr; align-items: center; gap: 6px; padding: 7px 0; border-top: 1px solid #2c1616; }
+.lg-fr__t { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text); }
+.lg-fr b { height: 7px; background: var(--text); }
+.lg-fr i { font-style: normal; text-align: center; font-size: 10px; color: var(--accent); font-weight: 700; }
+.lg-card__foot { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 10px; font-weight: 800; letter-spacing: .16em; color: var(--text-2); }
+.lg-card__foot .tv-ico { font-size: 16px; color: var(--text); }
+@media (min-width: 700px) {
+  .lg-pipe { grid-template-columns: 1.15fr 90px 1fr; }
+  .lg-link { height: 100%; min-height: 60px; }
+  .lg-link__line { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 1px; }
+  .lg-link__dot { left: 0; top: 50%; margin: -4px 0 0; }
+}
+
+.lg-badges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; perspective: 800px; }
+.lg-badge { position: relative; aspect-ratio: 5 / 7; border: 1px solid var(--line); background: var(--bg-2); display: grid; justify-items: center; align-content: start; gap: 7%; padding: 0 0 10%; overflow: hidden; transform-origin: 50% 0; }
+.lg-badge__clip { position: absolute; top: 5%; left: 50%; width: 22%; height: 3%; margin-left: -11%; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); z-index: 2; }
+.lg-badge__top { width: 100%; padding: 16% 0 6%; text-align: center; background: var(--accent); color: var(--bg); font-size: clamp(8px, .8vw, 11px); font-weight: 900; letter-spacing: .2em; }
+.lg-badge__av { width: 44%; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--text-2); display: grid; place-items: center; font-size: clamp(18px, 2.4vw, 34px); color: var(--text); background: var(--bg-3); }
+.lg-badge__name { width: 64%; height: 6px; background: var(--text); }
+.lg-badge__role { width: 40%; height: 5px; background: var(--text-2); margin-top: -4%; }
+.lg-badge__code { width: 64%; height: 12%; background: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 4px, var(--text) 4px 5px, transparent 5px 8px); opacity: .8; }
+
+.lg-layers { font-size: 12px; }
+.lg-ly { display: grid; grid-template-columns: 18px 1fr auto; align-items: center; gap: 10px; padding: 9px 10px; border-bottom: 1px solid var(--line); transition: background .3s; }
+.lg-ly:last-child { border-bottom: 0; }
+.lg-ly .tv-ico { font-size: 15px; color: var(--text-2); }
+.lg-ly code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lg-ly.is-hot { background: rgba(255, 59, 47, .14); }
+.lg-ly.is-hot .tv-ico { color: var(--accent); }
+.lg-val { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--accent); white-space: nowrap; }
+.lg-val--bar b { display: inline-block; width: 64px; height: 7px; background: var(--accent); vertical-align: middle; }
+
+.lg-flow { display: grid; gap: 22px; }
+.lg-lane__t { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-weight: 700; margin-bottom: 10px; }
+.lg-err, .lg-ok { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm); font-weight: 500; }
+.lg-err { color: var(--text-2); }
+.lg-err .tv-ico, .lg-ok .tv-ico { font-size: 18px; }
+.lg-err .tv-ico { color: var(--accent); }
+.lg-ok { color: var(--text); }
+.lg-ok .tv-ico { color: #2fbf71; }
+.lg-steps { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.lg-st { display: grid; justify-items: center; gap: 8px; padding: 12px 4px; border: 1px solid var(--line); background: var(--bg-2); text-align: center; font-size: 11px; line-height: 1.2; color: var(--text-2); }
+.lg-st .tv-ico { font-size: clamp(22px, 2.4vw, 30px); color: var(--text); }
+.lg-st--hand { border-style: dashed; }
+.lg-st--hand .tv-ico { color: var(--accent); }
+.lg-st.is-hot { border-color: var(--text); color: var(--text); }
+.lg-lane--after .lg-st.is-hot { border-color: var(--accent); }
+.lg-pulse { position: absolute; left: 0; top: -4px; width: 20%; height: 2px; background: var(--accent); }
+
+/* Tablas de los casos: filas que entran una por una */
+.js-motion .case-table tbody tr { opacity: 0; transform: translateX(-14px); transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 90ms + 250ms); }
+.js-motion .case-table.is-in tbody tr { opacity: 1; transform: none; }
+.rm .case-table tbody tr { transform: none; }
+.case-graphic { margin: 28px 0; }
+.case-graphic + .case-p { margin-top: 18px; }
+
+/* Portada: bloque Liga */
+.league__visual { display: grid; gap: 14px; }
+.league__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.lg-badge { aspect-ratio: 3 / 4; gap: 10px; padding-bottom: 14px; align-content: start; }
+.lg-badge__top { padding: 22% 0 8%; }
+.lg-badge__av { width: 40%; }
+.lg-badge__role { margin-top: -4px; }
+.lg-badge__code { height: 16px; width: 60%; margin-top: auto; }
+.league__visual .lg-badges { max-width: 560px; justify-self: end; width: 100%; }
+@media (max-width: 699px) { .lg-badges { grid-template-columns: repeat(4, 1fr); gap: 6px; } .lg-badge { gap: 6px; padding-bottom: 8px; } .lg-badge__code { height: 10px; } }
+.case-graphic .lg-badges { max-width: 640px; }

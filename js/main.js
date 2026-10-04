@@ -387,6 +387,79 @@
     show(0);
   });
 
+
+  $$('.case-table tbody tr').forEach(function (tr) { tr.style.setProperty('--i', Array.prototype.indexOf.call(tr.parentNode.children, tr)); });
+
+  /* ---------------- Gráficos vectoriales animados (Liga ADB) ---------------- */
+  (function graphics() {
+    var els = $$('[data-graphic]');
+    if (!els.length || !hasGsap) return;
+    $$('.case-table tbody tr').forEach(function (tr, k) { tr.style.setProperty('--i', Array.prototype.indexOf.call(tr.parentNode.children, tr)); });
+    function hot(tl, list, at, step, hold) {
+      list.forEach(function (el, k) {
+        tl.call(function () { el.classList.add('is-hot'); }, null, at + k * step)
+          .call(function () { el.classList.remove('is-hot'); }, null, at + k * step + (hold || step));
+      });
+    }
+    var build = {
+      pipeline: function (g) {
+        var tl = gsap.timeline({ repeat: -1, repeatDelay: 1.2, paused: true });
+        var rows = $$('.lg-xr', g), frows = $$('.lg-fr', g), dot = $('.lg-link__dot', g);
+        var horiz = window.matchMedia('(min-width: 700px)').matches;
+        tl.set(frows, { opacity: 0, x: 18 }).set($$('.lg-c b', g), { scaleX: 0, transformOrigin: '0 50%' });
+        tl.to($$('.lg-c b', g), { scaleX: 1, duration: 0.3, stagger: 0.04, ease: 'power2.out' }, 0.2);
+        rows.forEach(function (r, k) {
+          var at = 1.4 + k * 0.55;
+          tl.call(function () { $$('.lg-c', r).forEach(function (c) { c.classList.add('is-hot'); }); }, null, at)
+            .call(function () { $$('.lg-c', r).forEach(function (c) { c.classList.remove('is-hot'); }); }, null, at + 0.5)
+            .fromTo(dot, horiz ? { left: '0%', top: '50%' } : { top: '0%', left: '50%' }, horiz ? { left: '100%', duration: 0.45, ease: 'power1.inOut' } : { top: '100%', duration: 0.45, ease: 'power1.inOut' }, at)
+            .to(frows[k], { opacity: 1, x: 0, duration: 0.45, ease: 'expo.out' }, at + 0.4);
+        });
+        tl.to({}, { duration: 1.5 });
+        return tl;
+      },
+      badges: function (g) {
+        var tl = gsap.timeline({ repeat: -1, repeatDelay: 2.4, paused: true });
+        var b = $$('.lg-badge', g);
+        tl.fromTo(b, { rotationX: -70, opacity: 0, y: -10 }, { rotationX: 0, opacity: 1, y: 0, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.18 }, 0)
+          .fromTo($$('.lg-badge__name, .lg-badge__role', g), { scaleX: 0, transformOrigin: '50% 50%' }, { scaleX: 1, duration: 0.5, ease: 'expo.out', stagger: 0.06 }, 0.6)
+          .fromTo($$('.lg-badge__code', g), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.out', stagger: 0.12 }, 1.0)
+          .to(b, { y: -4, duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut', stagger: 0.1 }, 2.2);
+        return tl;
+      },
+      layers: function (g) {
+        var tl = gsap.timeline({ repeat: -1, repeatDelay: 1, paused: true });
+        var rows = $$('.lg-ly', g), vals = $$('.lg-val', g);
+        tl.set(vals, { opacity: 0, x: 12 });
+        rows.forEach(function (r, k) {
+          var at = 0.4 + k * 0.6;
+          tl.call(function () { r.classList.add('is-hot'); }, null, at)
+            .to(vals[k], { opacity: 1, x: 0, duration: 0.4, ease: 'expo.out' }, at + 0.1)
+            .call(function () { r.classList.remove('is-hot'); }, null, at + 0.55);
+        });
+        tl.to({}, { duration: 1.8 });
+        return tl;
+      },
+      flow: function (g) {
+        var tl = gsap.timeline({ repeat: -1, repeatDelay: 0.8, paused: true });
+        var before = $$('.lg-lane--before .lg-st', g), after = $$('.lg-lane--after .lg-st', g), pulse = $('.lg-pulse', g);
+        hot(tl, before, 0.3, 0.75);
+        tl.fromTo(pulse, { left: '0%', opacity: 1 }, { left: '80%', duration: 1.6, ease: 'none' }, 4.3)
+          .to(pulse, { opacity: 0, duration: 0.2 }, 5.9);
+        hot(tl, after, 4.3, 0.32, 1.2);
+        tl.to({}, { duration: 1.2 });
+        return tl;
+      }
+    };
+    els.forEach(function (g) {
+      var make = build[g.dataset.graphic];
+      if (!make) return;
+      var tl = make(g);
+      if (reduce) { tl.progress(1).pause(); return; }
+      new IntersectionObserver(function (e) { if (e[0].isIntersecting) tl.play(); else tl.pause(); }, { threshold: 0.25 }).observe(g);
+    });
+  })();
+
   /* ---------------- Lightbox ---------------- */
   var lb = $('#lb'), lbImg = $('#lbImg'), lbCap = $('#lbCap'), lbCount = $('#lbCount');
   if (lb) {
