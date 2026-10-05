@@ -479,8 +479,9 @@
         A.mSvg.style.transform = 'scaleX(' + (mw / 1000).toFixed(4) + ')';
         A.mNum.style.transform = 'translate3d(' + (mw - A.mNumW).toFixed(1) + 'px,0,0)';
       }
+      // Los subtítulos van pegados a la pantalla del teléfono: siguen su giro y su escala en cada corte
       var cap = obj(0, -st.ey * 0.42, st.ez);
-      put(A.caps, cap[0], cap[1]);
+      A.caps.style.transform = 'translate3d(' + cap[0].toFixed(1) + 'px,' + cap[1].toFixed(1) + 'px,0) rotate(' + (-st.rz).toFixed(4) + 'rad) scale(' + st.sx.toFixed(4) + ')';
       var btn = obj(-st.ex + 0.44, -0.3, st.ez);
       put(A.ripple, btn[0], btn[1]);
       var k2 = st.cur, sx0 = W * 0.92, sy0 = H * 0.96;
@@ -712,15 +713,16 @@
       .fromTo(st, { ui: 0 }, { ui: 1, duration: 4.2, ease: 'none', immediateRender: false }, 22.0);
     titleIn('s4', 21.7);
     show(stat4, 22.1); roll(cols4, 22.15, 1.3);
-    // Subtítulos tipo reel, palabra por palabra, con corte en cada beat
-    [[22.6, 0], [23.1, 1], [23.6, 2]].forEach(function (c) {
-      tl.fromTo(caps[c[1]], { opacity: 0, scale: 1.5, y: 8 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: 'back.out(2.6)' }, c[0]);
-    });
-    [[22.6, 0, 0.09], [23.6, 1, -0.09], [24.6, 2, 0.07]].forEach(function (c) {
-      verb('s4', c[1], c[0]);
-      tl.set(st, { rz: c[2], sx: 1.07, sy: 1.07 }, c[0])
-        .to(st, { rz: 0, sx: 1, sy: 1, duration: 0.45, ease: EOUT }, c[0] + 0.02)
-        .fromTo(flash, { opacity: 0.22 }, { opacity: 0, duration: 0.3, ease: 'power2.out', immediateRender: false }, c[0]);
+    // Subtítulos tipo reel: cada palabra entra con su corte de cámara, exacto en el beat (22.5, 23.0, 23.5)
+    // [tiempo, palabra, giro, escala, destello, sacudida]
+    [[22.5, 0, 0.06, 1.06, 0.16, 0], [23.0, 1, -0.06, 1.06, 0.16, 0], [23.5, 2, 0.09, 1.11, 0.28, 0.4]].forEach(function (h) {
+      var at = h[0];
+      verb('s4', h[1], at);
+      tl.fromTo(caps[h[1]], { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, at)
+        .set(st, { rz: h[2], sx: h[3], sy: h[3] }, at)
+        .to(st, { rz: 0, sx: 1, sy: 1, duration: 0.42, ease: EOUT }, at + 0.01)
+        .fromTo(flash, { opacity: h[4] }, { opacity: 0, duration: 0.3, ease: 'power2.out', immediateRender: false }, at);
+      if (h[5]) shake(at, h[5]);
     });
     tl.to(caps, { opacity: 0, duration: 0.3 }, 25.7);
     titleOut('s4', 26.35); hide(stat4, 26.35);
