@@ -1,12 +1,11 @@
 /* Joshua Flores · Showreel
    Capas: glow (0) · WebGL (1) · viñeta (2) · HUD (3) · tipografía (4) · flash (5) · controles (6) */
 
-.trailer { border-top: 1px solid var(--line); background: #08080A; overflow: hidden; }
+.trailer { padding-top: var(--nav-h); background: #08080A; overflow: hidden; }
 .showreel {
-  position: relative; height: max(640px, 88svh); overflow: hidden; isolation: isolate; color: var(--text); contain: strict;
+  position: relative; height: calc(100svh - var(--nav-h)); min-height: 520px; overflow: hidden; isolation: isolate; color: var(--text); contain: strict;
   background: radial-gradient(ellipse 70% 62% at 66% 46%, #15151a 0%, #0b0b0e 56%, #070709 100%);
 }
-@media (min-width: 900px) { .showreel { height: clamp(620px, 56.25vw, 94svh); } }
 @media (max-width: 899px) { .showreel { background: radial-gradient(ellipse 95% 52% at 50% 36%, #15151a 0%, #0b0b0e 60%, #070709 100%); } }
 
 .reel__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }

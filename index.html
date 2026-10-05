@@ -52,7 +52,7 @@
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
   <div class="wrap nav__inner">
-    <a href="#top" class="logo" aria-label="Joshua Flores, inicio" data-en-aria-label="Joshua Flores, home">JF<span class="logo__dot"></span></a>
+    <a href="#trailer" class="logo" aria-label="Joshua Flores, inicio" data-en-aria-label="Joshua Flores, home">JF<span class="logo__dot"></span></a>
     <nav class="nav__links" aria-label="Principal" data-en-aria-label="Main">
       <a href="#trabajo" data-en="Work">Trabajo</a>
       <a href="#servicios" data-en="Services">Servicios</a>
@@ -83,25 +83,6 @@
 </div>
 
 <main id="main">
-
-<!-- ============ HERO ============ -->
-<section class="hero wrap" id="top" aria-labelledby="heroName">
-  <div class="hero__marks" aria-hidden="true">
-    <span class="crop__m crop__m--tl"></span><span class="crop__m crop__m--tr"></span>
-    <span class="crop__m crop__m--bl"></span><span class="crop__m crop__m--br"></span>
-  </div>
-  <div class="hero__copy">
-    <p class="label" data-hero data-en="Graphic &amp; multimedia designer · Mexico City · <span class=&quot;accent&quot;>Available</span>">Diseñador gráfico y multimedia · CDMX · <span class="accent">Disponible</span></p>
-    <h1 class="display hero__name" id="heroName"><span class="hero__line" data-hero>Joshua</span><span class="hero__line" data-hero>Flores<span class="logo__dot" aria-hidden="true"></span></span></h1>
-    <div class="hero__row">
-      <p class="hero__sub" data-hero data-en="Design that works on a 6-inch screen and on an 80-metre banner.">Diseño que funciona en una pantalla de 6 pulgadas y en una lona de 80 metros.</p>
-      <div class="hero__ctas" data-hero>
-        <a href="#contacto" class="btn btn--primary"><span data-en="Hire me">Contratar</span> <svg class="icon icon--slide" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
-        <a href="docs/Joshua_Flores_CV_ES.pdf" class="btn btn--ghost" data-cv download><svg class="icon" aria-hidden="true"><use href="#i-download-simple"/></svg><span data-en="Download CV">Descargar CV</span></a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ============ SHOWREEL ============ -->
 <section class="trailer" id="trailer" aria-labelledby="reelTitle">
@@ -227,6 +208,24 @@
     <button class="intro__skip" type="button" id="trailerToggle" aria-pressed="false" aria-label="Pausar showreel" data-en-aria-label="Pause showreel"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></button>
   </div>
 </div>
+</section>
+
+<!-- ============ SOBRE MÍ ============ -->
+<section class="about" id="sobre-mi" aria-labelledby="aboutTitle">
+  <div class="wrap about__grid">
+    <div class="about__head">
+      <p class="label" data-reveal data-en="About me">Sobre mí</p>
+      <h1 class="display about__name" id="aboutTitle" data-reveal>Joshua<br>Flores<span class="logo__dot" aria-hidden="true"></span></h1>
+    </div>
+    <div class="about__body">
+      <p class="about__bio" data-reveal data-en="I design pieces that work on a 6-inch screen and on an 80-metre banner. Over 4 years across e-commerce, campaigns, AI product imagery and large-format production for events like the FIFA World Cup 2026 and Formula 1.">Diseño piezas que funcionan en una pantalla de 6 pulgadas y en una lona de 80 metros. Más de 4 años entre e-commerce, campañas, imagen de producto con IA y producción de gran formato para eventos como el Mundial FIFA 2026 y la Fórmula 1.</p>
+      <ul class="about__meta" data-reveal>
+        <li data-en="Graphic &amp; multimedia designer">Diseñador gráfico y multimedia</li>
+        <li data-en="Mexico City · hybrid or remote">Ciudad de México · híbrido o remoto</li>
+        <li class="accent" data-en="Available for projects">Disponible para proyectos</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- ============ MARCAS ============ -->
@@ -764,8 +763,7 @@
   <div class="wrap footer__inner">
     <span>© 2026 Joshua Flores</span>
     <span style="display: flex; gap: 24px">
-      <a href="#trailer" data-en="Watch trailer">Ver trailer</a>
-      <a href="#top" data-en="Back to top">Volver arriba</a>
+      <a href="#trailer" data-en="Back to top">Volver arriba</a>
     </span>
   </div>
 </footer>
