@@ -208,7 +208,7 @@
   /* ---------------- Slideshow de sitios web ---------------- */
   $$('.slides').forEach(function slideshow(root) {
     var slides = $$('.slide', root), infos = $$('.slide-info', root), bars = $$('.slides__bars i', root), count = $('.slides__count', root);
-    var i = 0, DUR = parseFloat(root.dataset.dur || '6'), timer = null, visible = false, hovering = false, barTween = null;
+    var i = 0, DUR = parseFloat(root.dataset.dur || '2.5'), timer = null, visible = false, hovering = false, barTween = null;
     function show(n, user) {
       i = (n + slides.length) % slides.length;
       slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); s.setAttribute('aria-hidden', String(k !== i)); s.tabIndex = k === i ? 0 : -1; });
