@@ -1,0 +1,156 @@
+/* Joshua Flores · Showreel
+   Capas: glow (0) · WebGL (1) · viñeta (2) · HUD (3) · tipografía (4) · flash (5) · controles (6) */
+
+.trailer { border-top: 1px solid var(--line); background: #08080A; overflow: hidden; }
+.showreel {
+  position: relative; height: max(640px, 88svh); overflow: hidden; isolation: isolate; color: var(--text); contain: strict;
+  background: radial-gradient(ellipse 70% 62% at 66% 46%, #15151a 0%, #0b0b0e 56%, #070709 100%);
+}
+@media (min-width: 900px) { .showreel { height: clamp(620px, 56.25vw, 94svh); } }
+@media (max-width: 899px) { .showreel { background: radial-gradient(ellipse 95% 52% at 50% 36%, #15151a 0%, #0b0b0e 60%, #070709 100%); } }
+
+.reel__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
+.reel__glow {
+  position: absolute; left: 0; top: 0; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%;
+  z-index: 0; pointer-events: none; opacity: 0; will-change: transform, opacity;
+  background: radial-gradient(closest-side, rgba(255, 59, 47, .30), rgba(255, 59, 47, .07) 55%, transparent);
+}
+.reel__obj2d { display: none; position: absolute; left: 0; top: 0; z-index: 1; will-change: transform;
+  background: radial-gradient(circle at 34% 28%, #ff9b90, #FF3B2F 42%, #7e0f09 100%); }
+.showreel.no-gl .reel__obj2d { display: block; }
+.showreel.no-gl .reel__gl { display: none; }
+.reel__vig { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(ellipse at center, transparent 56%, rgba(0, 0, 0, .55)); }
+.reel__flash { position: absolute; inset: 0; z-index: 5; background: #fff; opacity: 0; pointer-events: none; mix-blend-mode: overlay; }
+.reel__hud, .reel__layer { position: absolute; inset: 0; pointer-events: none; }
+.reel__hud { z-index: 3; }
+.reel__layer { z-index: 4; }
+.showreel .intro__ui { z-index: 6; }
+
+.tv-ico { width: 1em; height: 1em; fill: currentColor; display: block; }
+@keyframes caret { 50% { opacity: 0; } }
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute; top: clamp(30px, 6.4vw, 92px); display: flex; align-items: center; gap: 12px;
+  font-size: 10px; font-stretch: 80%; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--text-2); font-variant-numeric: tabular-nums;
+}
+.hud--tl { left: clamp(34px, 8vw, 118px); }
+.hud--tr { right: clamp(34px, 8vw, 118px); }
+.hud__icon { width: 22px; height: 22px; fill: var(--accent); overflow: visible; flex: none; }
+.hud__k { font-size: 13px; font-stretch: 125%; font-weight: 900; letter-spacing: -.02em; color: var(--text); }
+.hud__seq { display: inline-flex; gap: 3px; }
+.hud__seq i { width: 6px; height: 6px; background: #2a2a31; }
+.hud__seq i.on { background: var(--accent); }
+.hud__idx { display: inline-flex; align-items: center; color: var(--text); font-size: 12px; }
+.hud__of { color: var(--text-2); }
+.flap { display: inline-flex; gap: 2px; perspective: 300px; }
+.flap > span { display: inline-block; min-width: .66em; text-align: center; backface-visibility: hidden; }
+@media (max-width: 899px) {
+  .hud { top: 24px; gap: 9px; }
+  .hud--tl { left: 22px; }
+  .hud--tr { right: 22px; }
+  .hud__t, .hud__seq { display: none; }
+}
+
+/* ---------- Tipografía cinética ---------- */
+.kt {
+  font-family: "Archivo", system-ui, sans-serif; font-weight: 900; text-transform: uppercase; line-height: .9; letter-spacing: -.03em;
+  font-variation-settings: "wdth" var(--w, 118), "wght" var(--g, 900);
+}
+.ks { position: absolute; left: clamp(34px, 8vw, 118px); bottom: clamp(84px, 14%, 140px); max-width: 56%; visibility: hidden; }
+.ks__num { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--accent); font-size: 12px; font-stretch: 80%; font-weight: 800; letter-spacing: .24em; }
+.ks__num i { display: block; width: 44px; height: 1px; background: currentColor; transform-origin: 0 50%; }
+.ks__title { font-size: clamp(2.6rem, 5.2vw, 5.6rem); perspective: 600px; }
+.ks__title .kl { display: block; white-space: nowrap; }
+.ks__verbs { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 22px; font-size: 12px; font-stretch: 85%; font-weight: 800; letter-spacing: .2em; color: var(--text-2); }
+.ks__verbs span { position: relative; padding-bottom: 7px; transition: color .25s; }
+.ks__verbs span::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s var(--ease); }
+.ks__verbs span.on { color: var(--text); }
+.ks__verbs span.on::after { transform: scaleX(1); }
+
+.k-giant {
+  position: absolute; left: 50%; top: 50%; z-index: 4; margin: 0; white-space: nowrap; color: #fff; visibility: hidden; pointer-events: none;
+  font-size: clamp(4.4rem, 15.5vw, 18rem); mix-blend-mode: difference; transform: translate(-50%, -50%); --w: 62;
+}
+.k-tiny { position: absolute; left: 50%; top: 50%; width: 230px; height: 84px; transform: translate(12px, -82px); visibility: hidden; }
+.k-tiny svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--text-2); stroke-width: 1; }
+.k-tiny__t { position: absolute; left: 54px; top: 0; font-size: 11px; font-stretch: 80%; font-weight: 800; letter-spacing: .2em; color: var(--text); white-space: nowrap; }
+
+.k-box {
+  position: absolute; left: clamp(34px, 8vw, 118px); top: clamp(92px, 18%, 190px); display: flex; align-items: center; gap: 12px;
+  max-width: min(460px, 40%); padding: 13px 16px; border: 1px solid #2a2a31; background: rgba(17, 17, 21, .86);
+  font-size: clamp(13px, 1.1vw, 16px); white-space: nowrap; visibility: hidden;
+}
+.k-box__k { flex: none; color: var(--accent); font-size: 10px; font-stretch: 80%; font-weight: 800; letter-spacing: .18em; }
+.k-box .tv-ico { flex: none; font-size: 16px; color: var(--text-2); }
+.k-type { overflow: hidden; }
+.k-caret { flex: none; width: 2px; height: 1.15em; background: var(--text); animation: caret 1s steps(1) infinite; }
+
+.k-stat { position: absolute; left: clamp(34px, 8vw, 118px); top: clamp(92px, 18%, 190px); display: flex; align-items: flex-end; gap: 12px; visibility: hidden; }
+.k-stat__n { display: flex; align-items: flex-end; font-size: clamp(3rem, 6.2vw, 6.6rem); font-stretch: 125%; font-weight: 900; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.k-stat__u { padding-bottom: .55em; font-size: 12px; font-stretch: 85%; font-weight: 800; letter-spacing: .18em; color: var(--text-2); white-space: nowrap; }
+.odo { display: inline-flex; height: 1em; overflow: hidden; }
+.odo__c { display: flex; flex-direction: column; flex: none; align-self: flex-start; }
+.odo__c i { display: block; height: 1em; font-style: normal; line-height: 1; }
+
+.k-side { position: absolute; right: clamp(34px, 8vw, 118px); bottom: clamp(84px, 14%, 140px); display: grid; justify-items: end; gap: 10px; text-align: right; visibility: hidden; }
+.k-side__l { font-size: 10px; font-stretch: 80%; font-weight: 800; letter-spacing: .2em; color: var(--text-2); }
+.k-fmt { font-size: clamp(2.2rem, 3.8vw, 3.8rem); font-stretch: 118%; font-weight: 900; letter-spacing: -.02em; line-height: 1; perspective: 400px; }
+.k-roll { height: 1.3em; overflow: hidden; font-size: 12px; font-stretch: 85%; font-weight: 800; letter-spacing: .22em; color: var(--accent); }
+.k-roll__in { display: flex; flex-direction: column; }
+.k-roll__in i { display: block; height: 1.3em; line-height: 1.3em; font-style: normal; }
+.flap--board { gap: 3px; perspective: 500px; }
+.flap--board > span {
+  width: 1.08em; height: 1.4em; line-height: 1.4em; font-size: clamp(1.3rem, 2.3vw, 2.2rem); font-stretch: 105%; font-weight: 900;
+  color: var(--text); background: linear-gradient(#19191e 50%, #121216 50%); border: 1px solid #2a2a31;
+}
+
+/* Elementos anclados al objeto 3D: el contenedor lo mueve el render, el hijo lo anima GSAP */
+.k-anc { position: absolute; left: 0; top: 0; will-change: transform; }
+.k-c { position: absolute; left: 0; top: 0; }
+.k-tag { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 10px; border: 1px solid rgba(243, 244, 246, .22); background: rgba(14, 14, 18, .84); font-size: 10px; font-stretch: 85%; font-weight: 800; letter-spacing: .16em; white-space: nowrap; }
+.k-tag-a { opacity: 0; }
+.k-tag .tv-ico { font-size: 17px; color: var(--accent); }
+.k-pulse i { position: absolute; left: -70px; top: -70px; width: 140px; height: 140px; border-radius: 50%; border: 1.5px solid var(--accent); opacity: 0; }
+.k-chip .k-c { transform: translate(-50%, -100%); }
+.k-chip span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; background: var(--text); color: #0b0b0d; font-size: 10px; font-weight: 800; letter-spacing: .14em; white-space: nowrap; opacity: 0; }
+.k-chip .tv-ico { font-size: 15px; color: #1a9e57; }
+.k-measure { position: absolute; left: 0; top: 0; width: 1000px; height: 56px; visibility: hidden; will-change: transform; }
+.k-measure svg { position: absolute; left: 0; top: 0; width: 1000px; height: 22px; overflow: visible; fill: none; stroke: var(--text-2); stroke-width: 1; transform-origin: 0 0; vector-effect: non-scaling-stroke; }
+.k-measure svg path { vector-effect: non-scaling-stroke; }
+.k-measure__n { position: absolute; left: 0; top: 30px; display: flex; align-items: flex-end; gap: 6px; font-size: clamp(1.4rem, 2.6vw, 2.6rem); font-stretch: 125%; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.k-caps .k-c { display: grid; justify-items: center; transform: translate(-50%, -50%); text-align: center; }
+.k-caps span { display: block; opacity: 0; font-size: clamp(1.1rem, 1.85vw, 1.85rem); font-weight: 900; line-height: .98; text-transform: uppercase; color: #fff; font-variation-settings: "wdth" 84, "wght" 900; text-shadow: 0 2px 12px rgba(0, 0, 0, .5); white-space: nowrap; }
+.k-caps span.hl { color: var(--accent); }
+.k-cursor svg { display: block; width: 30px; height: 30px; opacity: 0; fill: #f3f4f6; stroke: #08080a; stroke-width: 1.4; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .55)); }
+.k-ripple i { position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
+.k-live .k-c { transform: translate(-100%, -150%); }
+.k-live span { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; background: var(--accent); color: #0b0b0d; font-size: 10px; font-weight: 900; letter-spacing: .2em; opacity: 0; white-space: nowrap; }
+.k-live span i { width: 7px; height: 7px; border-radius: 50%; background: #0b0b0d; }
+
+.k-name { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; text-align: center; padding: 0 var(--gutter); visibility: hidden; }
+.k-name .sep { font-size: clamp(3.2rem, 13vw, 12rem); text-align: left; }
+.k-name__dot { display: inline-block; width: .16em; height: .16em; margin-left: .04em; }
+.k-name__tag { margin-top: 22px; min-height: 1.3em; font-size: clamp(.78rem, 1.5vw, 1.05rem); font-stretch: 80%; font-weight: 700; letter-spacing: .3em; color: var(--text-2); }
+
+@media (max-width: 899px) {
+  .ks { left: 22px; right: 22px; bottom: 80px; max-width: none; }
+  .ks__title { font-size: clamp(2rem, 8.6vw, 3.2rem); }
+  .ks__num { margin-bottom: 12px; }
+  .ks__verbs { margin-top: 16px; gap: 6px 16px; font-size: 10px; }
+  .k-box, .k-stat { left: 22px; top: calc(clamp(20px, 6vw, 72px) + 44px); }
+  .k-box { max-width: calc(100% - 44px); }
+  .k-side { right: 22px; top: calc(clamp(20px, 6vw, 72px) + 44px); bottom: auto; }
+  .k-stat__n { font-size: clamp(2.4rem, 12vw, 3.4rem); }
+  .k-fmt { font-size: 2rem; }
+  .k-giant { font-size: 21vw; }
+  .k-tiny { width: 150px; }
+}
+
+/* Etiquetas técnicas siempre en mayúsculas */
+.ks__verbs, .k-tag, .k-box__k, .k-side__l, .k-roll, .k-stat__u, .k-chip span, .k-live span, .k-tiny__t { text-transform: uppercase; }
+
+/* Capas compuestas: lo que se mueve en cada cuadro no repinta */
+.showreel .intro__progress i { will-change: transform; }
+.k-tag-a { will-change: transform, opacity; }

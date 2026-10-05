@@ -146,170 +146,24 @@
     gsap.fromTo('.hero__marks .crop__m', { opacity: 0 }, { opacity: 1, duration: 1.2, stagger: 0.08, delay: 0.5 });
   }
 
-  /* ---------------- Trailer de servicios (en bucle) ---------------- */
-  var intro = $('#intro');
-  var trailerTl = null, userPaused = false, inView = false;
-
-  function typeInto(el, tl, at, dur) {
-    var full = el.textContent;
-    var o = { n: 0 };
-    tl.set(el, { textContent: '' }, at);
-    tl.to(o, { n: full.length, duration: dur, ease: 'none', onUpdate: function () { el.textContent = full.slice(0, Math.round(o.n)); } }, at);
-  }
-  function countUp(el, tl, at, dur) {
-    var end = parseFloat(el.dataset.tvCount || '0');
-    var o = { v: 0 };
-    tl.set(el, { textContent: '0' }, at);
-    tl.to(o, { v: end, duration: dur, ease: 'expo.out', onUpdate: function () { el.textContent = Math.round(o.v); } }, at);
-  }
-
-  function buildTrailer() {
-    var q = function (s) { return $(s, intro); };
-    var qa = function (s) { return $$(s, intro); };
-    var regs = qa('.intro__reg');
-    var wipe = q('.tv-wipe');
-    var sc = {};
-    qa('[data-scene]').forEach(function (s) { sc[s.dataset.scene] = s; });
-    var layers = qa('.sep__l');
-    var SPLIT = [{ x: -70, y: 0 }, { x: 70, y: 10 }, { x: 0, y: -46 }];
-
-    // Estado inicial = estado final: el nombre separado en tintas CMYK.
-    gsap.set(Object.keys(sc).map(function (k) { return sc[k]; }), { autoAlpha: 0 });
-    gsap.set(sc.name, { autoAlpha: 1 });
-    gsap.set(q('.intro__grid'), { opacity: 0.18 });
-    gsap.set(wipe, { scaleX: 0, transformOrigin: '0% 50%' });
-    layers.forEach(function (l, k) { gsap.set(l, { x: SPLIT[k].x, y: SPLIT[k].y, opacity: 1 }); });
-    gsap.set(q('.sep__w'), { opacity: 0 });
-    gsap.set($('.intro__role', sc.name), { autoAlpha: 0, y: 14 });
-
-    var tl = gsap.timeline({ repeat: -1, paused: true });
-
-    // ---- Nombre: las tintas entran en registro
-    tl.to(layers, { x: 0, y: 0, duration: 1.3, ease: 'power4.inOut' }, 0.1)
-      .to(regs, { rotation: '+=90', duration: 1.3, ease: 'power4.inOut' }, 0.1)
-      .to(q('.sep__w'), { opacity: 1, duration: 0.25 }, 1.3)
-      .to(layers, { opacity: 0, duration: 0.01 }, 1.55)
-      .to($('.intro__role', sc.name), { autoAlpha: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 1.35);
-
-    var prev = sc.name;
-    function cut(to, at) {
-      var from = prev;
-      tl.set(wipe, { transformOrigin: '0% 50%' }, at)
-        .to(wipe, { scaleX: 1, duration: 0.3, ease: 'power3.in' }, at)
-        .set(from, { autoAlpha: 0 }, at + 0.3)
-        .set(to, { autoAlpha: 1 }, at + 0.3)
-        .set(wipe, { transformOrigin: '100% 50%' }, at + 0.3)
-        .to(wipe, { scaleX: 0, duration: 0.38, ease: 'power3.out' }, at + 0.3);
-      prev = to;
-      return at + 0.3;
-    }
-    function titleIn(scene, at) {
-      tl.fromTo($('.tv__num', scene), { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: 'expo.out' }, at)
-        .fromTo($('.tv__title .display', scene), { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, at + 0.05);
-    }
-
-    var STEP = 3.4, S = 2.6, s;
-    // 01 · IA: el prompt se escribe, el núcleo genera y salen las piezas del sistema
-    s = cut(sc.ai, S);
-    titleIn(sc.ai, s);
-    tl.fromTo($('.tv-prompt', sc.ai), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, s);
-    typeInto($('.tv-type', sc.ai), tl, s + 0.15, 0.9);
-    tl.fromTo($('.tv-gen__core', sc.ai), { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(2)' }, s + 0.3)
-      .fromTo($('.tv-gen__core .tv-ico', sc.ai), { rotation: -90, scale: 0.6 }, { rotation: 0, scale: 1, duration: 1.4, ease: 'expo.out' }, s + 0.4)
-      .fromTo($$('.tv-gen__core .tv-ring', sc.ai), { scale: 0.5, opacity: 0.9 }, { scale: 1.7, opacity: 0, duration: 1.2, ease: 'power2.out', stagger: 0.45 }, s + 1.0)
-      .fromTo($('.tv-scan', sc.ai), { top: '0%', opacity: 1 }, { top: '100%', duration: 0.9, ease: 'power1.inOut' }, s + 1.0)
-      .to($('.tv-scan', sc.ai), { opacity: 0, duration: 0.2 }, s + 1.9)
-      .fromTo($$('.tv-gen__out li', sc.ai), { opacity: 0, x: -50, scale: 0.8 }, { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'expo.out', stagger: 0.16 }, s + 1.3);
-
-    // 02 · E-commerce: un formato que se adapta a cada canal
-    s = cut(sc.ecom, S + STEP);
-    titleIn(sc.ecom, s);
-    var box = $('.tv-ar__box', sc.ecom), lab = $('.tv-ar__l', sc.ecom);
-    tl.set(box, { width: '8em', height: '10em' }, s - 0.01).set(lab, { textContent: '4:5' }, s - 0.01)
-      .fromTo(box, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'expo.out' }, s)
-      .to(box, { width: '14.2em', height: '8em', duration: 0.7, ease: 'power3.inOut' }, s + 1.0).set(lab, { textContent: '16:9' }, s + 1.35)
-      .to(box, { width: '5.6em', height: '10em', duration: 0.7, ease: 'power3.inOut' }, s + 2.0).set(lab, { textContent: '9:16' }, s + 2.35)
-      .fromTo($$('.tv-chan li', sc.ecom), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out', stagger: 0.12 }, s + 0.4)
-      .to($$('.tv-chan li', sc.ecom), { color: '#FF3B2F', duration: 0.2, stagger: { each: 0.5, yoyo: true, repeat: 1 } }, s + 1.0);
-    countUp($('[data-tv-count]', sc.ecom), tl, s + 0.3, 1.6);
-    tl.fromTo($('.tv__meta', sc.ecom), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, s + 0.25);
-
-    // 03 · Gran formato: la impresora saca la lona y la regla mide
-    s = cut(sc.events, S + STEP * 2);
-    titleIn(sc.events, s);
-    tl.fromTo($('.tv-printer', sc.events), { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: 'expo.out' }, s)
-      .fromTo($('.tv-lona__sheet', sc.events), { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power3.inOut' }, s + 0.25)
-      .fromTo($('.tv-lona__fill', sc.events), { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: 'none' }, s + 1.0)
-      .fromTo($('.tv-lona__head', sc.events), { left: '0%', opacity: 1 }, { left: '100%', duration: 1.6, ease: 'none' }, s + 1.0)
-      .to($('.tv-lona__head', sc.events), { opacity: 0, duration: 0.2 }, s + 2.6)
-      .fromTo($('.tv-lona__txt', sc.events), { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'expo.out' }, s + 2.4)
-      .fromTo($('.tv-ruler__line', sc.events), { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: 'power3.inOut' }, s + 0.6);
-    countUp($('[data-tv-count]', sc.events), tl, s + 0.6, 1.8);
-
-    // 04 · Video: formato vertical, grabación, subtítulos y línea de tiempo
-    s = cut(sc.video, S + STEP * 3);
-    titleIn(sc.video, s);
-    var tc = $('.tv-tc', sc.video);
-    tl.fromTo($('.tv-phone', sc.video), { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'expo.out' }, s)
-      .fromTo($('.tv-phone__play', sc.video), { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(2.4)' }, s + 0.3)
-      .fromTo($('.tv-phone .tv-ring', sc.video), { scale: 0.6, opacity: 0.9 }, { scale: 1.8, opacity: 0, duration: 1.1, ease: 'power2.out', repeat: 1 }, s + 0.6)
-      .fromTo($('.tv-rec i', sc.video), { opacity: 1 }, { opacity: 0.15, duration: 0.4, repeat: 5, yoyo: true, ease: 'none' }, s + 0.3)
-      .fromTo($$('.tv-sub', sc.video), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'expo.out', stagger: 0.15 }, s + 1.2)
-      .fromTo($$('.tv-clip', sc.video), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'expo.out', stagger: 0.12 }, s + 0.2)
-      .fromTo($('.tv-playhead', sc.video), { left: '0%' }, { left: '100%', duration: 2.6, ease: 'none' }, s + 0.4);
-    (function () {
-      var o = { f: 0 };
-      tl.to(o, { f: 15 * 24, duration: 2.6, ease: 'none', onUpdate: function () {
-        var f = Math.round(o.f), sec = Math.floor(f / 24), fr = f % 24;
-        tc.textContent = '00:' + (sec < 10 ? '0' : '') + sec + ':' + (fr < 10 ? '0' : '') + fr;
-      } }, s + 0.4);
-    })();
-
-    // 05 · Web: el wireframe se arma y el cursor hace clic en el botón
-    s = cut(sc.web, S + STEP * 4);
-    titleIn(sc.web, s);
-    tl.fromTo($('.tv-browser', sc.web), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' }, s);
-    typeInto($('.tv-url', sc.web), tl, s + 0.2, 0.6);
-    tl.fromTo($$('.wf', sc.web), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', stagger: 0.08 }, s + 0.7)
-      .fromTo($('.tv-cursor', sc.web), { left: '82%', top: '88%', opacity: 0 }, { left: '16%', top: '55%', opacity: 1, duration: 1.0, ease: 'power3.inOut' }, s + 1.6)
-      .to($('.wf--btn', sc.web), { scale: 0.9, duration: 0.12, yoyo: true, repeat: 1 }, s + 2.65)
-      .to($('.wf--btn', sc.web), { backgroundColor: '#FF3B2F', duration: 0.2 }, s + 2.7);
-
-    // ---- Regreso al nombre; las tintas se separan y conectan con el inicio del bucle
-    s = cut(sc.name, S + STEP * 5);
-    tl.set(layers, { opacity: 0 }, s - 0.01)
-      .set(q('.sep__w'), { opacity: 1 }, s - 0.01)
-      .set($('.intro__role', sc.name), { autoAlpha: 1, y: 0 }, s - 0.01)
-      .to($('.intro__role', sc.name), { autoAlpha: 0, y: 14, duration: 0.5 }, s + 1.1)
-      .set(layers, { opacity: 1 }, s + 1.2)
-      .to(q('.sep__w'), { opacity: 0, duration: 0.25 }, s + 1.2);
-    layers.forEach(function (l, k) { tl.to(l, { x: SPLIT[k].x, y: SPLIT[k].y, duration: 1.1, ease: 'power4.inOut' }, s + 1.25); });
-    tl.to(regs, { rotation: '-=90', duration: 1.1, ease: 'power4.inOut' }, s + 1.25);
-    tl.to({}, { duration: 0.15 }, s + 2.35);
-
-    tl.fromTo(q('.intro__progress i'), { scaleX: 0 }, { scaleX: 1, duration: tl.duration(), ease: 'none' }, 0);
-    return tl;
-  }
-
-  function syncTrailer() {
-    if (!trailerTl) return;
-    if (inView && !userPaused) trailerTl.play(); else trailerTl.pause();
-  }
-
-  if (intro && hasGsap) {
-    trailerTl = buildTrailer();
-    new IntersectionObserver(function (e) { inView = e[0].isIntersecting; syncTrailer(); }, { threshold: 0.35 }).observe(intro);
+  /* ---------------- Showreel (js/reel.js) ---------------- */
+  var reelEl = $('#reel');
+  if (reelEl && window.JFReel && hasGsap) (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () {
+    var reel = window.JFReel.init(reelEl), userPaused = false, inView = false;
+    var syncReel = function () { if (inView && !userPaused) reel.play(); else reel.pause(); };
+    new IntersectionObserver(function (e) { inView = e[0].isIntersecting; syncReel(); }, { threshold: 0.3 }).observe(reelEl);
     var tbtn = $('#trailerToggle');
     tbtn.addEventListener('click', function () {
       userPaused = !userPaused;
       tbtn.setAttribute('aria-pressed', String(userPaused));
       $('use', tbtn).setAttribute('href', userPaused ? '#i-play' : '#i-pause');
-      var es = userPaused ? 'Reproducir trailer' : 'Pausar trailer', en = userPaused ? 'Play trailer' : 'Pause trailer';
+      var es = userPaused ? 'Reproducir showreel' : 'Pausar showreel', en = userPaused ? 'Play showreel' : 'Pause showreel';
       tbtn.dataset.esAriaLabel = es; tbtn.dataset.enAriaLabel = en;
       tbtn.setAttribute('aria-label', lang === 'en' ? en : es);
-      syncTrailer();
+      syncReel();
     });
-  }
+    window.__reel = reel;
+  });
 
   /* ---------------- Scroll: contadores y paneo ---------------- */
   function initScroll() {
