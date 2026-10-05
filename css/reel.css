@@ -164,3 +164,8 @@
 
 /* Las máscaras de las letras dejan respirar los remates curvos (O, S, C, G) */
 .kt .kc-mask { padding: .12em 0; margin: -.12em 0; }
+
+/* Móvil: sin marco de corte ni marcas de registro; el HUD se queda */
+@media (max-width: 899px) {
+  .showreel .intro__frame, .showreel .intro__reg { display: none; }
+}
