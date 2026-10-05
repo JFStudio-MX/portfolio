@@ -328,19 +328,47 @@
       x: 0, y: 0, side: 0, fit: 0, s: 0.13, sx: 1, sy: 1,
       rx: 0, ry: 0, rz: 0, float: 0, wave: 0, glow: 0.25, shadow: 0, shake: 0,
       fPhone: 0, fWeb: 0, fBox: 0, fBanner: 0, fAd: 0, ui: 0, click: 0,
-      tags: 0, orb: 0, cur: 0, land: 0
+      tags: 0, orb: 0, cur: 0, wr: 0, wp: 0
     };
 
     /* ---------- Layout ---------- */
-    var W = 1, H = 1, L = {}, dot = { x: 0, y: 0, s: 0.05 }, A = null;
+    var W = 1, H = 1, L = {}, dot = { x: 0, y: 0, s: 0.05 }, A = null, NAME = {};
+    function box(el) { var m = el.parentNode; return (m && m.classList && m.classList.contains('kc-mask') ? m : el).getBoundingClientRect(); }
     function measure() {
       var d = root.querySelector('.k-name__dot');
       if (!d) return;
       var r = d.getBoundingClientRect(), b = root.getBoundingClientRect();
       if (!r.width) return;
-      dot.x = ((r.left + r.width / 2 - b.left) / W * 2 - 1) * L.halfW;
-      dot.y = (1 - (r.top + r.height / 2 - b.top) / H * 2) * L.halfH;
-      dot.s = (r.width / 2) / L.ppw;
+      var wx = function (x) { return ((x - b.left) / W * 2 - 1) * L.halfW; };
+      var wy = function (y) { return (1 - (y - b.top) / H * 2) * L.halfH; };
+      var rad = r.width / 2;
+      dot.x = wx(r.left + rad); dot.y = wy(r.top + rad); dot.s = rad / L.ppw;
+      if (!NAME.c1 || !NAME.c1.length) return;
+      var a = box(NAME.c1[0]), z = box(NAME.c1[NAME.c1.length - 1]), a2 = box(NAME.c2[0]);
+      var gap = a2.top - a.top, base2 = r.top + rad, base1 = base2 - gap, under = rad * 2.2;
+      // Puntos en pantalla: inicio y fin de la línea 1, inicio de la línea 2 y el punto final
+      L.Ppx = [[a.left - rad * 2.2, base1 + under], [z.right + rad * 2.2, base1 + under], [a2.left - rad * 2.2, base2 + under], [r.left + rad, base2]];
+      L.P = L.Ppx.map(function (q) { return [wx(q[0]), wy(q[1])]; });
+      // Control del retorno de carro: baja en arco entre las dos líneas
+      L.P.push([(L.P[1][0] + L.P[2][0]) / 2, (L.P[1][1] + L.P[2][1]) / 2 - (gap / L.ppw) * 0.4]);
+    }
+    function pathAt(w) {
+      var P = L.P;
+      if (!P) return [dot.x, dot.y];
+      if (w <= 1) return [mix(P[0][0], P[1][0], w), mix(P[0][1], P[1][1], w)];
+      if (w <= 2) {
+        var t = w - 1, u = 1 - t;
+        return [u * u * P[1][0] + 2 * u * t * P[4][0] + t * t * P[2][0], u * u * P[1][1] + 2 * u * t * P[4][1] + t * t * P[2][1]];
+      }
+      var k = Math.min(w - 2, 1);
+      return [mix(P[2][0], P[3][0], k), mix(P[2][1], P[3][1], k)];
+    }
+    // Qué tan avanzado va el punto cuando pasa por cada letra (proporcional, no depende del tamaño)
+    function charFractions() {
+      var P = L.Ppx;
+      function f(list, x0, x1) { return list.map(function (c) { var r = box(c); return Math.max(0, Math.min(1, (r.left + r.width / 2 - x0) / (x1 - x0))); }); }
+      if (!P) return { f1: NAME.c1.map(function (c, i) { return i / NAME.c1.length; }), f2: NAME.c2.map(function (c, i) { return i / NAME.c2.length; }) };
+      return { f1: f(NAME.c1, P[0][0], P[1][0]), f2: f(NAME.c2, P[2][0], P[3][0]) };
     }
     function layout() {
       var r = root.getBoundingClientRect();
@@ -382,7 +410,7 @@
         var lim = Math.min((L.halfW * (L.desk ? 0.92 : 0.8) - Math.abs(px)) / st.ex, L.halfH * 0.82 / st.ey);
         if (lim < S) S = mix(S, Math.max(lim, 0.01), st.fit);
       }
-      if (st.land > 0) { px = mix(px, dot.x, st.land); py = mix(py, dot.y, st.land); S = mix(S, dot.s, st.land); }
+      if (st.wr > 0) { var wpos = pathAt(st.wp); px = mix(px, wpos[0], st.wr); py = mix(py, wpos[1], st.wr); S = mix(S, dot.s, st.wr); }
       var shx = st.shake ? Math.sin(t * 93) * st.shake * 0.035 : 0, shy = st.shake ? Math.cos(t * 71) * st.shake * 0.035 : 0;
       var ry = st.ry + Math.sin(t * 0.6) * 0.08 * st.float, rx = st.rx + Math.sin(t * 0.8) * 0.05 * st.float;
       var Rm = mul(rotY(ry), mul(rotX(rx), rotZ(st.rz)));
@@ -459,7 +487,7 @@
       put(A.cursor, mix(sx0, btn[0] - 5, k2), mix(sy0, btn[1] - 3, k2) - Math.sin(k2 * Math.PI) * H * 0.12);
       var lv = obj(st.ex, st.ey, st.ez);
       put(A.live, lv[0], lv[1]);
-      var lt = st.shake ? 'translate3d(' + (shx * -120).toFixed(1) + 'px,' + (shy * 120).toFixed(1) + 'px,0)' : '';
+      var lt = st.shake ? 'translate3d(' + (-shx * L.ppw).toFixed(1) + 'px,' + (shy * L.ppw).toFixed(1) + 'px,0)' : '';
       if (lt !== lastLayer) { layer.style.transform = lt; lastLayer = lt; }
 
       // HUD: timecode a 24 fps, secuenciador al beat y progreso
@@ -545,15 +573,15 @@
       var g = groups[k];
       tl.set(g.el, { autoAlpha: 1 }, at)
         .call(function () { g.verbs.forEach(function (v) { v.classList.remove('on'); }); }, null, at);
-      if (LITE) tl.fromTo(g.chars, { yPercent: 118, skewY: 7 }, { yPercent: 0, skewY: 0, duration: 0.9, ease: EOUT, stagger: 0.016, force3D: false }, at);
-      else tl.fromTo(g.chars, { yPercent: 118, rotationX: -80, transformOrigin: '50% 100%' }, { yPercent: 0, rotationX: 0, duration: 0.95, ease: EOUT, stagger: 0.018 }, at)
+      if (LITE) tl.fromTo(g.chars, { yPercent: 122, skewY: 7 }, { yPercent: 0, skewY: 0, duration: 0.9, ease: EOUT, stagger: 0.016, force3D: false }, at);
+      else tl.fromTo(g.chars, { yPercent: 122, rotationX: -80, transformOrigin: '50% 100%' }, { yPercent: 0, rotationX: 0, duration: 0.95, ease: EOUT, stagger: 0.018 }, at)
         .fromTo(g.title, { '--w': 62 }, { '--w': 118, duration: 1.3, ease: 'power3.out' }, at);
       if (g.num) tl.fromTo(g.num, { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.5, ease: EOUT }, at).fromTo(g.bar, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: EOUT }, at + 0.1);
       if (g.verbs.length) tl.fromTo(g.verbs, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: EOUT, stagger: 0.07 }, at + 0.35);
     }
     function titleOut(k, at) {
       var g = groups[k];
-      tl.to(g.chars, { yPercent: -118, duration: 0.45, ease: 'power3.in', stagger: 0.01, force3D: !LITE }, at);
+      tl.to(g.chars, { yPercent: -122, duration: 0.45, ease: 'power3.in', stagger: 0.01, force3D: !LITE }, at);
       if (!LITE) tl.to(g.title, { '--w': 62, duration: 0.45, ease: 'power3.in' }, at);
       if (g.num) tl.to(g.num, { opacity: 0, duration: 0.3 }, at);
       if (g.verbs.length) tl.to(g.verbs, { opacity: 0, duration: 0.3 }, at);
@@ -727,34 +755,80 @@
       .to(st, { click: 0, duration: 0.3 }, 32.0)
       .set(st, { cur: 0 }, 32.0);
 
-    /* ===== Cierre (32.5 a 37 s): el objeto vuelve a ser el punto de la marca ===== */
-    var name = q('name'), tag2 = q('tag2');
-    var sepL = name.querySelectorAll('.sep__l'), sepW = name.querySelector('.sep__w');
-    var OFF = [[-70, 0], [70, 10], [0, -46]];
-    flap(idx, '00', 32.4); icon('dot', 32.35);
-    tl.call(measure, null, 32.25);
-    morph('sphere', 32.3, 0.8);
-    tl.to(st, { fWeb: 0, duration: 0.3 }, 32.3)
-      .to(st, { rx: 0, ry: 4 * TAU, s: 0.13, side: 0, fit: 0, float: 0, shadow: 0, glow: 0.25, duration: 0.8, ease: EWHIP }, 32.3)
-      .set(name, { autoAlpha: 1 }, 32.6);
-    sepL.forEach(function (l, i) {
-      tl.fromTo(l, { x: OFF[i][0], y: OFF[i][1], opacity: 0 }, { opacity: 1, duration: 0.3 }, 32.6 + i * 0.07)
-        .to(l, { x: 0, y: 0, duration: 1.2, ease: 'power4.inOut' }, 33.0);
+    /* ===== Cierre (32.25 a 38 s): supercut de formas; el punto escribe el nombre y aterriza como punto final ===== */
+    var nameEl = q('name'), nameT = q('nameT'), dim = q('dim');
+    var dimL = dim.querySelector('.k-dim__l'), dimT = dim.querySelector('.k-dim__t');
+    var dimA = dim.querySelector('.k-dim__a'), dimB = dim.querySelector('.k-dim__b');
+    var nameLines = Array.prototype.slice.call(nameT.querySelectorAll('.kn'));
+    NAME.c1 = splitChars(nameLines[0], true);
+    NAME.c2 = splitChars(nameLines[1], true);
+    measure();
+
+    // Supercut: el objeto repasa a tiempo todas las formas que tomó (corcheas, 0.25 s)
+    tl.to(st, { fWeb: 0, duration: 0.2 }, 32.2)
+      .to(st, { side: 0, x: 0, y: 0, rx: 0, s: 0.78, fit: 1, float: 0, shadow: 1, duration: 0.45, ease: EWHIP }, 32.2);
+    [['star', '01'], ['box', '02'], ['banner', '03'], ['phone', '04'], ['web', '05']].forEach(function (f, i) {
+      var at = 32.25 + i * 0.25;
+      morph(f[0], at, 0.24, EOUT);
+      icon(f[0], at);
+      flap(idx, f[1], at);
+      tl.to(st, { ry: '+=' + (Math.PI / 2), duration: 0.24, ease: EOUT }, at)
+        .fromTo(st, { sx: 1.14, sy: 0.88 }, { sx: 1, sy: 1, duration: 0.22, ease: 'power2.out', immediateRender: false }, at);
     });
-    tl.to(st, { land: 1, duration: 0.85, ease: EWHIP }, 33.0)
-      .fromTo(sepW, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 34.05)
-      .to(sepL, { opacity: 0, duration: 0.01 }, 34.3);
-    squash(33.85, 1.3, 0.7);
-    if (HAS.scr) tl.set(tag2, { textContent: '' }, 34.25).to(tag2, { duration: 0.9, scrambleText: { text: 'FROM 6 INCHES TO 80 METERS.', chars: 'XO01/', speed: 0.8 }, ease: 'none' }, 34.3);
-    else { tl.set(tag2, { textContent: 'FROM 6 INCHES TO 80 METERS.' }, 34.3); show(tag2, 34.3); }
-    tl.to(tag2, { opacity: 0, duration: 0.3 }, 35.8)
-      .to(sepW, { opacity: 0, duration: 0.2 }, 35.9)
-      .to(sepL, { opacity: 1, duration: 0.01 }, 35.9);
-    sepL.forEach(function (l, i) { tl.to(l, { x: OFF[i][0], y: OFF[i][1], opacity: 0, duration: 0.6, ease: 'power3.in' }, 35.95); });
-    tl.set(name, { autoAlpha: 0 }, 36.6)
-      .set(tag2, { opacity: 1, textContent: '' }, 36.6)
-      .to(st, { land: 0, duration: 0.8, ease: EWHIP }, 36.1)
-      .to({}, { duration: 0.25 }, 36.75);
+
+    // Se encoge a punto y viaja al inicio de la primera línea
+    var T0 = 33.5, LAND = 35.5, D1 = 0.6, CR = 0.26, D2 = 0.62;
+    var W1 = LAND - (D1 + CR + D2), W2 = W1 + D1 + CR;
+    morph('sphere', T0, 0.35, EWHIP);
+    flap(idx, '00', T0); icon('dot', T0);
+    tl.call(measure, null, T0 - 0.05)
+      .to(st, { s: 0.13, fit: 0, shadow: 0, rx: 0, duration: 0.35, ease: EWHIP }, T0)
+      .set(nameEl, { autoAlpha: 1 }, T0)
+      .set(NAME.c1.concat(NAME.c2), { yPercent: 120 }, T0)
+      .set(st, { wp: 0 }, T0)
+      .to(st, { wr: 1, duration: W1 - T0 - 0.04, ease: EWHIP }, T0 + 0.04);
+
+    // Escritura: línea 1, retorno de carro en arco, línea 2 y aterrizaje en el punto
+    tl.to(st, { wp: 1, duration: D1, ease: 'none' }, W1)
+      .to(st, { wp: 2, duration: CR, ease: 'power2.inOut' }, W1 + D1)
+      .to(st, { wp: 3, duration: D2, ease: 'none' }, W2);
+    var FR = charFractions();
+    function pop(c, at) {
+      tl.fromTo(c, { yPercent: 120, scaleY: 1.55, transformOrigin: '50% 100%' }, { yPercent: 0, scaleY: 1, duration: 0.42, ease: 'back.out(2.2)', immediateRender: false, force3D: !LITE }, at);
+    }
+    NAME.c1.forEach(function (c, i) { pop(c, W1 + FR.f1[i] * D1 - 0.05); });
+    NAME.c2.forEach(function (c, i) { pop(c, W2 + FR.f2[i] * D2 - 0.05); });
+    squash(LAND, 1.38, 0.68);
+    shake(LAND, 0.45);
+    tl.to(st, { glow: 1.1, duration: 0.08, ease: 'power2.out' }, LAND)
+      .to(st, { glow: 0.25, duration: 0.6, ease: 'power2.out' }, LAND + 0.08);
+
+    // Cota técnica: 6 IN a 80 M, del tamaño exacto del nombre
+    tl.set(dim, { autoAlpha: 1 }, LAND + 0.05);
+    if (HAS.draw) tl.fromTo(dimL, { drawSVG: '50% 50%' }, { drawSVG: '0% 100%', duration: 0.6, ease: EOUT, immediateRender: false }, LAND + 0.05);
+    tl.fromTo(dimT, { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, LAND + 0.4);
+    function scramble(el, text, at) {
+      tl.set(el, { textContent: '' }, at - 0.01);
+      if (HAS.scr) tl.to(el, { duration: 0.4, scrambleText: { text: text, chars: '0123456789', speed: 1 }, ease: 'none' }, at);
+      else tl.set(el, { textContent: text }, at);
+    }
+    scramble(dimA, '6 IN', LAND + 0.15);
+    scramble(dimB, '80 M', LAND + 0.25);
+    // El punto respira con el beat mientras se lee la firma
+    [36.0, 36.5].forEach(function (b) {
+      tl.to(st, { glow: 0.65, duration: 0.08 }, b).to(st, { glow: 0.25, duration: 0.4, ease: 'power2.out' }, b + 0.08);
+    });
+
+    // Salida: la cota se recoge, las letras bajan y el punto vuelve al centro (inicio del bucle)
+    var OUT = 37.0;
+    tl.to([dimA, dimB, dimT], { opacity: 0, duration: 0.25 }, OUT);
+    if (HAS.draw) tl.to(dimL, { drawSVG: '50% 50%', duration: 0.35, ease: 'power3.in' }, OUT);
+    tl.to(NAME.c2.slice().reverse().concat(NAME.c1.slice().reverse()), { yPercent: 120, duration: 0.36, ease: 'power3.in', stagger: 0.025, force3D: !LITE }, OUT + 0.05)
+      .to(st, { wr: 0, duration: 0.55, ease: EWHIP }, OUT + 0.3)
+      .set([nameEl, dim], { autoAlpha: 0 }, OUT + 0.8)
+      .set([dimA, dimB, dimT], { opacity: 1 }, OUT + 0.8)
+      .set([dimA, dimB], { textContent: '' }, OUT + 0.8)
+      .to({}, { duration: 0.15 }, OUT + 0.85);
 
     gsap.ticker.add(function (time, dt) { if (running) { clock += Math.min(dt, 50) / 1000; render(); } });
     var running = false;

@@ -129,10 +129,17 @@
 .k-live span { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; background: var(--accent); color: #0b0b0d; font-size: 10px; font-weight: 900; letter-spacing: .2em; opacity: 0; white-space: nowrap; }
 .k-live span i { width: 7px; height: 7px; border-radius: 50%; background: #0b0b0d; }
 
-.k-name { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; text-align: center; padding: 0 var(--gutter); visibility: hidden; }
-.k-name .sep { font-size: clamp(3.2rem, 13vw, 12rem); text-align: left; }
+.k-name { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 var(--gutter); visibility: hidden; }
+.k-name__lock { display: inline-grid; text-align: left; }
+.k-name__t { font-size: clamp(3.2rem, 12.5vw, 11.5rem); line-height: .88; letter-spacing: -.035em; --w: 125; }
+.k-name__t .kn { display: block; white-space: nowrap; }
 .k-name__dot { display: inline-block; width: .16em; height: .16em; margin-left: .04em; }
-.k-name__tag { margin-top: 22px; min-height: 1.3em; font-size: clamp(.78rem, 1.5vw, 1.05rem); font-stretch: 80%; font-weight: 700; letter-spacing: .3em; color: var(--text-2); }
+.k-dim { position: relative; height: 40px; margin-top: clamp(16px, 2.4vw, 32px); visibility: hidden; }
+.k-dim svg { position: absolute; left: 0; top: 0; width: 100%; height: 14px; overflow: visible; fill: none; stroke: var(--text-2); stroke-width: 1; }
+.k-dim svg path { vector-effect: non-scaling-stroke; }
+.k-dim__a, .k-dim__b { position: absolute; top: 22px; font-size: 12px; font-stretch: 80%; font-weight: 800; letter-spacing: .22em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.k-dim__a { left: 0; color: var(--text); }
+.k-dim__b { right: 0; color: var(--accent); }
 
 @media (max-width: 899px) {
   .ks { left: 22px; right: 22px; bottom: 80px; max-width: none; }
@@ -145,6 +152,7 @@
   .k-stat__n { font-size: clamp(2.4rem, 12vw, 3.4rem); }
   .k-fmt { font-size: 2rem; }
   .k-giant { font-size: 21vw; }
+  .k-name__t { font-size: 14.5vw; }
   .k-tiny { width: 150px; }
 }
 
@@ -154,3 +162,6 @@
 /* Capas compuestas: lo que se mueve en cada cuadro no repinta */
 .showreel .intro__progress i { will-change: transform; }
 .k-tag-a { will-change: transform, opacity; }
+
+/* Las máscaras de las letras dejan respirar los remates curvos (O, S, C, G) */
+.kt .kc-mask { padding: .12em 0; margin: -.12em 0; }

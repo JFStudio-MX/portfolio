@@ -20,9 +20,6 @@
   --accent: #FF3B2F;
   --accent-hover: #FF5A4F;
   --on-accent: #0B0B0D;
-  --cmyk-c: #00A3E0;
-  --cmyk-m: #E6007E;
-  --cmyk-y: #FFE600;
 
   --fs-xs: .75rem;
   --fs-sm: .875rem;
@@ -248,15 +245,6 @@ ul, ol { padding: 0; list-style: none; }
 .intro__reg--l { left: clamp(10px, 3vw, 36px); top: 50%; margin-top: -15px; }
 .intro__reg--r { right: clamp(10px, 3vw, 36px); top: 50%; margin-top: -15px; }
 
-.sep { position: relative; display: inline-block; font-size: clamp(3.2rem, 15vw, 13rem); }
-.sep span { display: block; }
-.sep__l { position: absolute; inset: 0; mix-blend-mode: screen; }
-.sep__l--c { color: var(--cmyk-c); }
-.sep__l--m { color: var(--cmyk-m); }
-.sep__l--y { color: var(--cmyk-y); }
-.sep__base { color: transparent; }
-.sep__w { position: absolute; inset: 0; color: var(--text); opacity: 0; }
-.intro__role { margin-top: 18px; font-size: clamp(.9rem, 2.4vw, 1.25rem); font-stretch: 80%; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--text-2); }
 
 .intro__ui {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 18px var(--gutter);
