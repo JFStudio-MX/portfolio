@@ -62,7 +62,7 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 body.is-locked { overflow: hidden; }
 
@@ -783,3 +783,17 @@ html { overflow-x: clip; }
   .cav__head { grid-template-columns: 6fr 5fr; gap: 56px; align-items: end; }
   .cav__duo { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
+
+/* ---------- Fichas apiladas: cada sección se queda quieta y la siguiente la cubre ---------- */
+.stack-on main > .is-card { position: sticky; z-index: var(--zi, 1); }
+.stack-on main > .is-card:not(.band--alt):not(.trailer) { background: var(--bg); }
+.stack-on main > .is-card + .is-card { box-shadow: 0 -1px 0 var(--line), 0 -30px 60px rgba(0, 0, 0, .5); }
+.stack-on #web.is-card { box-shadow: -1px 0 0 var(--line), -40px 0 80px rgba(0, 0, 0, .55); }
+.card-shade { position: absolute; left: 0; right: 0; bottom: 0; height: min(100%, 100vh); background: #040405; opacity: 0; pointer-events: none; z-index: 60; will-change: opacity; }
+.stack-on .trailer .showreel { transform-origin: 50% 40%; }
+.stack-on #web.is-card { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+@media (max-width: 899px) {
+  .stack-on main > .is-card + .is-card { box-shadow: 0 -1px 0 var(--line), 0 -14px 28px rgba(0, 0, 0, .45); }
+  .stack-on #web.is-card { box-shadow: -1px 0 0 var(--line), -18px 0 36px rgba(0, 0, 0, .5); }
+}
+.stack-on main > .is-card.is-covered { visibility: hidden; }

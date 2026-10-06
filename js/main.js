@@ -23,7 +23,7 @@
   /* ---------------- Scroll suave (Lenis) ---------------- */
   var lenis = null;
   if (window.Lenis && hasGsap && !reduce) {
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true, anchors: { offset: -64 } });
+    lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
@@ -146,11 +146,77 @@
     gsap.fromTo('.hero__marks .crop__m', { opacity: 0 }, { opacity: 1, duration: 1.2, stagger: 0.08, delay: 0.5 });
   }
 
+  /* ---------------- Fichas apiladas ---------------- */
+  // Cada sección se queda fija al llegar a su final y la siguiente sube encima.
+  // Las secciones más altas que la pantalla se recorren completas antes de quedarse fijas.
+  // Las posiciones se calculan con el alto real de cada ficha (no dependen de transformaciones).
+  var reelCovered = false;
+  (function initStack() {
+    if (!$('#trailer')) return;   // solo en la portada; los casos de estudio se leen de corrido
+    var cards = $$('main > section, main > article');
+    if (cards.length < 2) return;
+    var tops = [], vh = innerHeight;
+    cards.forEach(function (c, i) {
+      c.classList.add('is-card');
+      c.style.setProperty('--zi', i + 1);
+      var sh = document.createElement('i'); sh.className = 'card-shade'; sh.setAttribute('aria-hidden', 'true');
+      c.appendChild(sh); c._shade = sh;
+    });
+    doc.classList.add('stack-on');
+    function measureStack() {
+      vh = innerHeight;
+      var y = $('main').offsetTop;
+      cards.forEach(function (c, i) {
+        tops[i] = y; y += c.offsetHeight;
+        c.style.top = Math.min(0, vh - c.offsetHeight) + 'px';
+      });
+    }
+    measureStack();
+    function within(el, card) { var y = 0; while (el && el !== card) { y += el.offsetTop; el = el.offsetParent; } return y; }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]'); if (!a) return;
+      var el = document.getElementById(a.getAttribute('href').slice(1)); if (!el) return;
+      var card = el.closest('.is-card'); if (!card) return;
+      e.preventDefault();
+      measureStack();
+      var y = tops[cards.indexOf(card)] + (el === card ? 0 : within(el, card));
+      if (lenis) lenis.scrollTo(y, { duration: 1.4 }); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    if (!hasGsap) { window.addEventListener('resize', measureStack); return; }
+    ScrollTrigger.addEventListener('refreshInit', measureStack);
+    cards.forEach(function (c, i) {
+      if (!cards[i + 1]) return;
+      // Inicio: la ficha siguiente aparece sobre la parte visible de la actual; fin: la cubre por completo
+      var range = { start: function () { return tops[i + 1] - Math.min(c.offsetHeight, vh); }, end: function () { return tops[i + 1]; }, scrub: true, invalidateOnRefresh: true };
+      gsap.fromTo(c._shade, { opacity: 0 }, { opacity: 0.62, ease: 'none', scrollTrigger: range });
+      // Totalmente cubierta: deja de pintarse (slideshows y gráficos escondidos no consumen)
+      ScrollTrigger.create({ start: function () { return tops[i + 1] + 2; }, end: 'max', toggleClass: { targets: c, className: 'is-covered' } });
+      if (c.id === 'trailer') {
+        gsap.fromTo($('.showreel', c), { scale: 1 }, { scale: 0.9, ease: 'none', scrollTrigger: { start: range.start, end: range.end, scrub: true, invalidateOnRefresh: true } });
+        ScrollTrigger.create({ start: function () { return tops[1]; }, end: 'max', onToggle: function (st) { reelCovered = st.isActive; if (window.__syncReel) window.__syncReel(); } });
+      }
+    });
+    // Una ficha entra de lado: "Diseño web" se desliza sobre Impresos
+    var web = $('#web'), wi = cards.indexOf(web);
+    if (web && wi > 0) {
+      var mmx = gsap.matchMedia();
+      mmx.add('(min-width: 0px)', function () {
+        var tlx = gsap.timeline({ scrollTrigger: { start: function () { return tops[wi] - vh; }, end: function () { return tops[wi]; }, scrub: true, invalidateOnRefresh: true } });
+        // y cancela el avance vertical (la ficha se ve quieta arriba) mientras x la trae desde la derecha
+        tlx.fromTo(web, { y: function () { return -vh; } }, { y: 0, ease: 'none', duration: 1 }, 0)
+          .fromTo(web, { xPercent: 100 }, { xPercent: 0, ease: 'power2.out', duration: 1 }, 0);
+        return function () { gsap.set(web, { clearProps: 'transform' }); };
+      });
+    }
+    window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+  })();
+
   /* ---------------- Showreel (js/reel.js) ---------------- */
   var reelEl = $('#reel');
   if (reelEl && window.JFReel && hasGsap) (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () {
     var reel = window.JFReel.init(reelEl), userPaused = false, inView = false;
-    var syncReel = function () { if (inView && !userPaused) reel.play(); else reel.pause(); };
+    var syncReel = function () { if (inView && !reelCovered && !userPaused) reel.play(); else reel.pause(); };
+    window.__syncReel = syncReel;
     new IntersectionObserver(function (e) { inView = e[0].isIntersecting; syncReel(); }, { threshold: 0.3 }).observe(reelEl);
     var tbtn = $('#trailerToggle');
     tbtn.addEventListener('click', function () {
