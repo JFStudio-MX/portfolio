@@ -408,9 +408,8 @@ ul, ol { padding: 0; list-style: none; }
 .print__text { display: grid; gap: 18px; align-content: start; }
 .print__flat { margin-top: 8px; }
 .print__note { color: var(--text-2); font-size: var(--fs-sm); padding-left: 14px; border-left: 2px solid var(--accent); }
-.print__family { display: grid; grid-auto-flow: column; grid-auto-columns: 44%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin-top: clamp(28px, 4vw, 48px); padding-bottom: 6px; scrollbar-width: none; }
-.print__family::-webkit-scrollbar { display: none; }
-.print__family li { scroll-snap-align: start; display: grid; gap: 10px; }
+.print__family { display: grid; grid-auto-flow: column; grid-auto-columns: 40vw; grid-auto-columns: 44cqw; gap: 12px; margin-top: clamp(28px, 4vw, 48px); padding-bottom: 6px; }
+.print__family li { display: grid; gap: 10px; }
 .print__family span { font-size: var(--fs-sm); color: var(--text-2); }
 @media (min-width: 900px) {
   .print { grid-template-columns: 5fr 7fr; gap: 56px; align-items: center; }
@@ -449,9 +448,26 @@ ul, ol { padding: 0; list-style: none; }
 @media (min-width: 900px) { .league { grid-template-columns: 4fr 8fr; gap: 64px; align-items: center; } }
 
 /* Video */
-.reels { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
-.reel { flex: none; width: min(78vw, 340px); scroll-snap-align: start; background: var(--bg-3); border: 1px solid var(--line); }
-.reel iframe { display: block; width: 100%; height: 640px; border: 0; background: #fff; }
+/* Video: tarjetas propias (sin iframes en la página; el reel oficial se abre al tocar) */
+.reels { display: grid; grid-auto-flow: column; grid-auto-columns: min(62vw, 300px); gap: 12px; padding: 0 var(--gutter) 8px; }
+.reel-card { aspect-ratio: 9 / 16; cursor: pointer; text-align: left; }
+.reel-card img { position: absolute; inset: 0; height: 100%; object-fit: cover; -webkit-user-drag: none; user-select: none; }
+.reel-card::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(8, 8, 10, .85), rgba(8, 8, 10, 0) 45%); }
+.reel-card__play { position: absolute; left: 50%; top: 50%; z-index: 2; width: 58px; height: 58px; margin: -29px 0 0 -29px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--on-accent); transition: transform var(--t-std) var(--ease); }
+.reel-card__play .icon { width: 22px; height: 22px; margin-left: 3px; }
+.reel-card:hover .reel-card__play, .reel-card:focus-visible .reel-card__play { transform: scale(1.08); }
+.reel-card__meta { position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 2; display: grid; gap: 2px; color: var(--text); }
+.reel-card__meta b { font-weight: 700; }
+.reel-card__meta span { font-size: var(--fs-xs); color: var(--text-2); letter-spacing: .04em; }
+@media (min-width: 900px) { .reels { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); grid-auto-columns: auto; max-width: var(--max); margin-inline: auto; gap: 16px; } }
+
+/* Ventana del reel */
+.igm { position: fixed; inset: 0; z-index: var(--z-lightbox); display: grid; grid-template-rows: auto 1fr; background: rgba(6, 6, 8, .96); padding: 10px var(--gutter) 16px; }
+.igm[hidden] { display: none; }
+.igm__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; }
+.igm__open { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
+.igm__stage { min-height: 0; overflow-y: auto; display: flex; justify-content: center; align-items: flex-start; overscroll-behavior: contain; }
+.igm__stage iframe { display: block; width: min(100%, 420px); height: 760px; border: 0; background: #fff; }
 .nw { white-space: nowrap; }
 .reel__cap { padding: 12px 14px; font-size: var(--fs-sm); color: var(--text-2); display: flex; justify-content: space-between; gap: 8px; }
 
@@ -495,7 +511,8 @@ ul, ol { padding: 0; list-style: none; }
 @media (min-width: 900px) { .profile { grid-template-columns: 6fr 3fr 3fr; gap: 48px; } }
 
 /* Contacto: ocupa todo el alto de la pantalla (no se asoma Experiencia); el pie queda abajo */
-.contact { min-height: 100svh; display: flex; flex-direction: column; padding-top: calc(var(--nav-h) + clamp(16px, 4vh, 48px)); }
+/* lvh: con la barra del navegador oculta (como suele estar al final de la página) la ficha sigue cubriendo toda la pantalla */
+.contact { min-height: 100vh; min-height: 100lvh; display: flex; flex-direction: column; padding-top: calc(var(--nav-h) + clamp(16px, 4vh, 48px)); }
 .contact__main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: clamp(28px, 6vh, 72px); }
 .contact__title { font-size: 11vw; }
 .contact__grid { display: grid; gap: 22px; margin-top: clamp(24px, 6vh, 72px); }
@@ -539,7 +556,15 @@ ul, ol { padding: 0; list-style: none; }
 
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-stopped { overflow: clip; }
-.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-horizontal] { overscroll-behavior: contain; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* Filas horizontales en móvil (reels, etiquetas): un carrusel con overflow nativo atrapa el gesto vertical,
+   así que el navegador solo hace el scroll vertical (pan-y) y el arrastre horizontal lo mueve JS */
+@media (max-width: 899.98px) {
+  .xrow { overflow: hidden; touch-action: pan-y; container-type: inline-size; }
+  .xrow > ul { width: max-content; transition: transform .55s var(--ease); will-change: transform; }
+  .xrow > ul.is-drag { transition: none; }
+}
 
 /* Movimiento reducido: las apariciones siguen siendo fundidos, sin desplazamiento */
 .rm [data-reveal], .rm [data-reveal].is-in { transform: none; }
@@ -758,7 +783,7 @@ html { overflow-x: clip; }
 /* ---------- NÉRÉ y ORVA: dos marcas, dos mundos de color ---------- */
 .cav { margin-top: clamp(56px, 8vw, 104px); padding-top: clamp(36px, 4.5vw, 56px); border-top: 1px solid var(--line); }
 .cav__head { display: grid; gap: 18px; margin-bottom: clamp(24px, 3.5vw, 40px); }
-.cav__title { margin-top: 10px; font-size: clamp(2.6rem, 6vw, 5.4rem); font-stretch: 125%; font-weight: 900; letter-spacing: -.035em; line-height: .9; text-transform: uppercase; white-space: nowrap; }
+.cav__title { margin-top: 10px; font-size: clamp(2rem, 10vw, 5.4rem); font-stretch: 125%; font-weight: 900; letter-spacing: -.035em; line-height: .9; text-transform: uppercase; white-space: nowrap; }
 .cav__brief { display: grid; gap: 14px; align-content: end; }
 .cav__parts { display: flex; flex-wrap: wrap; gap: 8px; }
 .cav__parts li { border: 1px solid var(--line); padding: 6px 12px; font-size: var(--fs-sm); color: var(--text-2); }
@@ -783,6 +808,7 @@ html { overflow-x: clip; }
 .cav__thumbs span { font-size: var(--fs-xs); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(243, 244, 246, .72); }
 @media (min-width: 900px) {
   .cav__head { grid-template-columns: 6fr 5fr; gap: 56px; align-items: end; }
+  .cav__title { font-size: clamp(2.6rem, 6vw, 5.4rem); }
   .cav__duo { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
 

@@ -133,7 +133,15 @@
     var rio = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { en.target.classList.toggle('is-in', en.isIntersecting); });
     }, { rootMargin: '0px 0px -7% 0px', threshold: 0.08 });
-    $$('[data-reveal]').forEach(function (el) { rio.observe(el); });
+    // Contacto es la última ficha y mide una pantalla: su contenido aparece completo y en orden
+    // cuando la ficha entra (no elemento por elemento junto al borde, que en móvil cambia con la barra del navegador)
+    var ct = $('.contact'), ctEls = ct ? $$('[data-reveal]', ct) : [];
+    ctEls.forEach(function (el, i) { el.style.setProperty('--d', 120 + i * 110 + 'ms'); });
+    $$('[data-reveal]').forEach(function (el) { if (ctEls.indexOf(el) === -1) rio.observe(el); });
+    if (ct) new IntersectionObserver(function (e) {
+      if (e[0].intersectionRatio >= 0.35) ctEls.forEach(function (el) { el.classList.add('is-in'); });
+      else if (!e[0].isIntersecting) ctEls.forEach(function (el) { el.classList.remove('is-in'); });
+    }, { threshold: [0, 0.35] }).observe(ct);
   }
 
   /* ---------------- Hero (entrada) ---------------- */
@@ -431,6 +439,86 @@
       if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
     });
   }
+
+  /* ---------------- Filas horizontales en móvil (reels, etiquetas): arrastre propio, scroll vertical nativo ---------------- */
+  $$('.xrow').forEach(function (vp) {
+    var row = vp.firstElementChild; if (!row) return;
+    var x = 0, sx = 0, sy = 0, base = 0, dragging = false, moved = false, pid = null;
+    function off() { return window.innerWidth >= 900; }
+    function maxX() { return Math.max(0, row.scrollWidth - vp.clientWidth); }
+    function step() { var li = row.children; return li[1] ? li[1].offsetLeft - li[0].offsetLeft : vp.clientWidth; }
+    function set(v, anim) {
+      x = off() ? 0 : Math.max(-maxX(), Math.min(0, v));
+      row.classList.toggle('is-drag', !anim);
+      row.style.transform = x ? 'translate3d(' + x + 'px,0,0)' : '';
+    }
+    vp.addEventListener('pointerdown', function (e) {
+      if (off() || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      sx = e.clientX; sy = e.clientY; base = x; dragging = false; moved = false; pid = e.pointerId;
+    });
+    vp.addEventListener('pointermove', function (e) {
+      if (pid !== e.pointerId) return;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!dragging) {
+        if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { dragging = true; moved = true; try { vp.setPointerCapture(e.pointerId); } catch (er) {} } else return;
+      }
+      set(base + dx, false);
+    });
+    function end(e) {
+      if (pid !== e.pointerId) return;
+      pid = null;
+      if (!dragging) return;
+      dragging = false;
+      // Encaja en la tarjeta más cercana, con un empujón hacia donde iba el gesto
+      var st = step(), v = e.clientX - sx;
+      var i = Math.round(-(base + v + (v < 0 ? -st * 0.25 : st * 0.25)) / st);
+      set(-i * st, true);
+      setTimeout(function () { moved = false; }, 0);
+    }
+    vp.addEventListener('pointerup', end);
+    vp.addEventListener('pointercancel', end);
+    // Si se arrastró, soltar no abre la tarjeta
+    vp.addEventListener('click', function (e) { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+    // Con teclado: la tarjeta enfocada entra a la vista
+    row.addEventListener('focusin', function (e) {
+      if (off()) return;
+      var li = e.target.closest('li'); vp.scrollLeft = 0;
+      if (li) set(-(li.offsetLeft - row.firstElementChild.offsetLeft), true);
+    });
+    window.addEventListener('resize', function () { set(x, false); });
+  });
+
+  /* ---------------- Reels de Instagram: el embed oficial solo se carga al tocar ---------------- */
+  (function igModal() {
+    var m = $('#igm'); if (!m) return;
+    var stage = $('#igmStage'), open = $('#igmOpen'), last = null;
+    function close() {
+      m.hidden = true; stage.innerHTML = ''; unlock();
+      if (last) last.focus();
+    }
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ig]'); if (!b) return;
+      var id = b.dataset.ig, url = 'https://www.instagram.com/p/' + id + '/';
+      last = b;
+      open.href = url;
+      stage.innerHTML = '';
+      var f = document.createElement('iframe');
+      f.src = url + 'embed/'; f.title = 'Instagram'; f.setAttribute('allowtransparency', 'true'); f.allowFullscreen = true; f.setAttribute('scrolling', 'no');
+      stage.appendChild(f);
+      m.hidden = false; lock();
+      $('#igmClose').focus();
+    });
+    // El embed avisa su alto real: la ventana se ajusta para mostrarlo completo
+    window.addEventListener('message', function (e) {
+      if (String(e.origin).indexOf('instagram.com') === -1) return;
+      var d = e.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (er) { return; }
+      var f = $('iframe', stage);
+      if (f && d && d.type === 'MEASURE' && d.details && d.details.height) f.style.height = Math.ceil(d.details.height) + 'px';
+    });
+    $('#igmClose').addEventListener('click', close);
+    m.addEventListener('click', function (e) { if (e.target === m || e.target === stage) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) close(); });
+  })();
 
   /* ---------------- Copiar correo ---------------- */
   var copyBtn = $('#copyMail');
