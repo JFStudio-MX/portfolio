@@ -497,6 +497,8 @@
       W = Math.max(r.width, 1); H = Math.max(r.height, 1);
       L.desk = W >= 900;
       var dpr = Math.min(window.devicePixelRatio || 1, L.desk ? 2 : 1.75);
+      // Presupuesto de píxeles: en ultrawide/4K el lienzo no pasa de ~2.6 MP (el costo del shader crece con cada píxel)
+      dpr = Math.min(dpr, Math.sqrt(2.6e6 / Math.max(1, W * H)));
       if (R) { canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); R.setSand(L.desk ? 72000 : 26000); }
       L.dpr = dpr;
       L.halfH = Math.tan(FOV / 2) * CAMZ;
@@ -682,7 +684,8 @@
     }
 
     /* ---------- Línea de tiempo ---------- */
-    tl = gsap.timeline({ repeat: -1, paused: true });
+    // Se reproduce una vez y se queda en la firma; "Ver de nuevo" corre la salida y vuelve a empezar
+    tl = gsap.timeline({ paused: true, onComplete: function () { tl.restart(); } });
 
     function morph(name, at, dur, ease) {
       var s = SH[name];
@@ -986,6 +989,7 @@
 
     // Salida: la cota se recoge, las letras bajan y el punto vuelve al centro (inicio del bucle)
     var OUT = 37.0;
+    tl.call(function () { if (ended) return; ended = true; running = false; tl.pause(); progEl.style.transform = 'scaleX(1)'; if (api.onEnd) api.onEnd(); }, null, OUT - 0.02);
     tl.to([dimA, dimB, dimT], { opacity: 0, duration: 0.25 }, OUT);
     if (HAS.draw) tl.to(dimL, { drawSVG: '50% 50%', duration: 0.35, ease: 'power3.in' }, OUT);
     tl.to(NAME.c2.slice().reverse().concat(NAME.c1.slice().reverse()), { yPercent: 120, duration: 0.36, ease: 'power3.in', stagger: 0.025, force3D: !LITE }, OUT + 0.05)
@@ -996,12 +1000,14 @@
       .to({}, { duration: 0.15 }, OUT + 0.85);
 
     gsap.ticker.add(function (time, dt) { if (running) { clock += Math.min(dt, 50) / 1000; render(); } });
-    var running = false;
+    var running = false, ended = false;
     render();
 
     var api = {
       tl: tl, st: st,
-      play: function () { running = true; tl.play(); },
+      play: function () { if (ended) return; running = true; tl.play(); },
+      replay: function () { ended = false; running = true; tl.play(OUT); },
+      ended: function () { return ended; },
       pause: function () { running = false; tl.pause(); },
       seek: function (t) { tl.seek(t, false); clock = t; render(); }
     };

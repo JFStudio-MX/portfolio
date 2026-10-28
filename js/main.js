@@ -23,7 +23,7 @@
   /* ---------------- Scroll suave (Lenis) ---------------- */
   var lenis = null;
   if (window.Lenis && hasGsap && !reduce) {
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
@@ -196,12 +196,14 @@
       if (!cards[i + 1]) return;
       // Inicio: la ficha siguiente aparece sobre la parte visible de la actual; fin: la cubre por completo
       var range = { start: function () { return tops[i + 1] - Math.min(c.offsetHeight, vh); }, end: function () { return tops[i + 1]; }, scrub: true, invalidateOnRefresh: true };
-      // La capa se desenfoca y oscurece a la vez; solo se anima su opacidad (barato para la GPU)
-      gsap.fromTo(c._shade, { opacity: 0 }, { opacity: 1, ease: 'none', scrollTrigger: range });
+      // La ficha cubierta se hunde un poco y se oscurece: solo transform y opacidad (la GPU lo compone sin repintar).
+      // will-change solo mientras dura el tramo, para no reservar capas gigantes todo el tiempo.
+      var sink = Object.assign({}, range, { onToggle: function (st) { c.classList.toggle('is-sinking', st.isActive); } });
+      gsap.fromTo(c._shade, { opacity: 0 }, { opacity: 0.82, ease: 'none', scrollTrigger: sink });
+      if (!reduce) gsap.fromTo(c, { scale: 1 }, { scale: 0.94, ease: 'none', immediateRender: false, scrollTrigger: Object.assign({}, range) });
       // Totalmente cubierta: deja de pintarse (slideshows y gráficos escondidos no consumen)
       ScrollTrigger.create({ start: function () { return tops[i + 1] + 2; }, end: 'max', toggleClass: { targets: c, className: 'is-covered' } });
       if (c.id === 'trailer') {
-        gsap.fromTo($('.showreel', c), { filter: 'blur(0px)' }, { filter: 'blur(18px)', ease: 'none', scrollTrigger: { start: range.start, end: range.end, scrub: true, invalidateOnRefresh: true } });
         ScrollTrigger.create({ start: function () { return tops[1]; }, end: 'max', onToggle: function (st) { reelCovered = st.isActive; if (window.__syncReel) window.__syncReel(); } });
       }
     });
@@ -216,15 +218,29 @@
     window.__syncReel = syncReel;
     new IntersectionObserver(function (e) { inView = e[0].isIntersecting; syncReel(); }, { threshold: 0.3 }).observe(reelEl);
     var tbtn = $('#trailerToggle');
-    tbtn.addEventListener('click', function () {
-      userPaused = !userPaused;
-      tbtn.setAttribute('aria-pressed', String(userPaused));
-      $('use', tbtn).setAttribute('href', userPaused ? '#i-play' : '#i-pause');
-      var es = userPaused ? 'Reproducir showreel' : 'Pausar showreel', en = userPaused ? 'Play showreel' : 'Pause showreel';
+    function setBtn(icon, es, en) {
+      $('use', tbtn).setAttribute('href', '#i-' + icon);
       tbtn.dataset.esAriaLabel = es; tbtn.dataset.enAriaLabel = en;
       tbtn.setAttribute('aria-label', lang === 'en' ? en : es);
+    }
+    // Al terminar se queda en la firma (sin bucle: la GPU descansa) y el botón ofrece verlo de nuevo
+    reel.onEnd = function () {
+      tbtn.classList.add('is-replay'); tbtn.setAttribute('aria-pressed', 'false');
+      setBtn('replay', 'Ver showreel de nuevo', 'Watch showreel again');
+    };
+    tbtn.addEventListener('click', function () {
+      if (reel.ended()) {
+        userPaused = false; tbtn.classList.remove('is-replay');
+        setBtn('pause', 'Pausar showreel', 'Pause showreel');
+        reel.replay(); return;
+      }
+      userPaused = !userPaused;
+      tbtn.setAttribute('aria-pressed', String(userPaused));
+      if (userPaused) setBtn('play', 'Reproducir showreel', 'Play showreel'); else setBtn('pause', 'Pausar showreel', 'Pause showreel');
       syncReel();
     });
+    // "Motion" en el índice lleva al showreel y, si ya terminó, lo vuelve a correr
+    $$('[data-replay]').forEach(function (a) { a.addEventListener('click', function () { if (reel.ended()) setTimeout(function () { tbtn.click(); }, 900); }); });
     window.__reel = reel;
   });
 
