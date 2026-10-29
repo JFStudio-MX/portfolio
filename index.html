@@ -17,8 +17,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=20261028b">
-<link rel="stylesheet" href="css/reel.css?v=20261028b">
+<link rel="stylesheet" href="css/styles.css?v=20261028c">
+<link rel="stylesheet" href="css/reel.css?v=20261028c">
 <script>
   // Antes del primer pintado: activa las apariciones (solo opacidad si el sistema pide menos movimiento).
   (function () {
@@ -55,6 +55,7 @@
     <a href="#trailer" class="logo" aria-label="Joshua Flores, inicio" data-en-aria-label="Joshua Flores, home">JF<span class="logo__dot"></span></a>
     <nav class="nav__links" aria-label="Principal" data-en-aria-label="Main">
       <a href="#trabajo" data-en="Work">Trabajo</a>
+      <a href="#proceso" data-en="Process">Proceso</a>
       <a href="#servicios" data-en="Services">Servicios</a>
       <a href="#experiencia" data-en="Experience">Experiencia</a>
       <a href="#contacto" data-en="Contact">Contacto</a>
@@ -75,6 +76,7 @@
   <nav class="menu__links" aria-label="Móvil" data-en-aria-label="Mobile">
     <a href="#trabajo" data-en="Work">Trabajo</a>
     <a href="#video" data-en="Video">Video</a>
+    <a href="#proceso" data-en="Process">Proceso</a>
     <a href="#servicios" data-en="Services">Servicios</a>
     <a href="#experiencia" data-en="Experience">Experiencia</a>
     <a href="#contacto" data-en="Contact">Contacto</a>
@@ -230,11 +232,12 @@
     <p class="label finder__t" data-reveal data-en="What are you hiring for?">¿Qué perfil buscas?</p>
     <ul class="finder__list">
       <li data-reveal><a class="finder__item" href="#web"><span class="finder__k" data-en="UX/UI &amp; web">UX/UI y web</span><span class="finder__v" data-en="Live sites, designed and built end to end">Sitios en línea, diseñados y construidos de punta a punta</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
-      <li data-reveal><a class="finder__item" href="#ecommerce"><span class="finder__k" data-en="Product &amp; e-commerce">Producto y e-commerce</span><span class="finder__v" data-en="Listing system for 100+ SKUs · Fellowes · Dahle case">Sistema de fichas para 100+ SKUs · caso Fellowes · Dahle</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+      <li data-reveal><a class="finder__item" href="#ecommerce"><span class="finder__k" data-en="Product &amp; <span class=&quot;nw&quot;>e-commerce</span>">Producto y <span class="nw">e-commerce</span></span><span class="finder__v" data-en="Listing system for 100+ SKUs · Fellowes · Dahle case">Sistema de fichas para 100+ SKUs · caso Fellowes · Dahle</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
       <li data-reveal><a class="finder__item" href="#trailer" data-replay><span class="finder__k" data-en="Motion">Motion</span><span class="finder__v" data-en="Code-driven showreel and motion graphics">Showreel animado en código y gráficos en movimiento</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
       <li data-reveal><a class="finder__item" href="#video"><span class="finder__k" data-en="Video editing">Edición de video</span><span class="finder__v" data-en="Vertical reels for brands, around 10 a month">Reels verticales para marcas, unos 10 al mes</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
       <li data-reveal><a class="finder__item" href="#impresos"><span class="finder__k" data-en="Graphic &amp; packaging">Gráfico y packaging</span><span class="finder__v" data-en="Labels, packaging and banners up to 80 m">Etiquetas, packaging y lonas de hasta 80 m</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
     </ul>
+    <a class="finder__more" href="#proceso" data-reveal><span data-en="Or see how I work, with proof for each step">O mira cómo trabajo, con pruebas de cada paso</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
   </nav>
 </section>
 
@@ -648,8 +651,76 @@
   </div>
 </section>
 
+<!-- ============ CÓMO TRABAJO ============ -->
+<section class="band" id="proceso" aria-labelledby="mtdTitle">
+  <div class="wrap">
+    <div class="band__head">
+      <h2 class="h2" id="mtdTitle" data-reveal data-en="How I work">Cómo trabajo</h2>
+      <p class="lead" data-reveal data-en="The same approach for an Amazon listing, an 80&nbsp;m banner, a reel or a website. Every point links to its proof.">El mismo criterio para una ficha de Amazon, una lona de 80&nbsp;m, un reel o un sitio web. Cada punto lleva a su prueba.</p>
+    </div>
+    <ol class="method">
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">01</span>
+        <h3 class="mtd__t" data-en="Who sees it, and where">Quién lo ve y dónde</h3>
+        <p class="mtd__d" data-en="Before opening the file I define users and context as explicit hypotheses. A listing is designed at 1080&nbsp;px but judged at 64&nbsp;px on a phone.">Antes de abrir el archivo defino usuarios y contexto como hipótesis explícitas. Una ficha se diseña a 1080&nbsp;px, pero se decide a 64&nbsp;px en un teléfono.</p>
+        <a class="mtd__proof" href="casos/fellowes-dahle.html#tamano"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Real viewing sizes · Fellowes · Dahle">Tamaños reales de lectura · Fellowes · Dahle</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="UX/UI · Product · E-commerce">UX/UI · Producto · E-commerce</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">02</span>
+        <h3 class="mtd__t" data-en="The real problem">El problema real</h3>
+        <p class="mtd__d" data-en="At Liga ADB the bottleneck was not copying faster, it was that someone had to copy at all. Changing the question changed the solution.">En la Liga ADB el cuello de botella no era copiar más rápido, era que alguien tuviera que copiar. Cambiar la pregunta cambió la solución.</p>
+        <a class="mtd__proof" href="casos/liga-adb.html#contexto"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Task analysis · Liga ADB">Análisis de tareas · Liga ADB</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="UX · Product · Operations">UX · Producto · Operaciones</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">03</span>
+        <h3 class="mtd__t" data-en="Systems, not one-offs">Sistemas, no piezas sueltas</h3>
+        <p class="mtd__d" data-en="Seven zones for 100+ products, templates with fixed and variable parts, layer names that work like tokens. Volume does not break consistency.">Siete zonas para más de 100 productos, plantillas con partes fijas y variables, nombres de capa que funcionan como tokens. El volumen no rompe la consistencia.</p>
+        <a class="mtd__proof" href="casos/fellowes-dahle.html#anatomia"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Anatomy of a listing · Fellowes · Dahle">Anatomía de una pieza · Fellowes · Dahle</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="Design systems · Brand · Campaigns">Design systems · Marca · Campañas</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">04</span>
+        <h3 class="mtd__t" data-en="Prototype, then decide">Prototipo, luego decido</h3>
+        <p class="mtd__d" data-en="For the league I built two paths: one faster on paper, one with full typographic control. I chose the second and kept the first as a fallback.">Para la liga construí dos caminos: uno más rápido en teoría y otro con control tipográfico total. Elegí el segundo y el primero quedó de respaldo.</p>
+        <a class="mtd__proof" href="casos/liga-adb.html#arquitectura"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Prototype comparison · Liga ADB">Comparación de prototipos · Liga ADB</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="UX · Product">UX · Producto</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">05</span>
+        <h3 class="mtd__t" data-en="I measure, failures included">Mido, también lo que falla</h3>
+        <p class="mtd__d" data-en="I shrank published pieces to their real size and measured their contrast. Three things failed and I wrote down the rule I would apply today.">Reduje piezas publicadas a su tamaño real y medí su contraste. Tres cosas no pasaron y dejé escrita la regla que aplicaría hoy.</p>
+        <a class="mtd__proof" href="casos/fellowes-dahle.html#prueba"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="The thumbnail test · Fellowes · Dahle">La prueba de la miniatura · Fellowes · Dahle</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="UX/UI · Accessibility · QA">UX/UI · Accesibilidad · QA</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">06</span>
+        <h3 class="mtd__t" data-en="Accessible from the start">Accesible desde el inicio</h3>
+        <p class="mtd__d" data-en="Mobile first, the main action visible without scrolling and every colour pair measured. The Otro Josh site shipped with zero WCAG 2.1 AA violations in the automated audit.">Móvil primero, la acción principal visible sin scroll y cada par de colores medido. El sitio de Otro Josh salió sin violaciones WCAG 2.1 AA en la auditoría automática.</p>
+        <a class="mtd__proof" href="casos/otro-josh.html#pantallas"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Screens and tokens · Otro Josh">Pantallas y tokens · Otro Josh</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="UX/UI · Web · Front-end">UX/UI · Web · Front-end</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">07</span>
+        <h3 class="mtd__t" data-en="Automation and AI, with judgement">Automatizo y uso IA con criterio</h3>
+        <p class="mtd__d" data-en="An Excel to Illustrator workflow took hand-typed data to zero. With AI, the tool generates; I direct, retouch the real product and say how I used it.">Un flujo de Excel a Illustrator dejó en cero los datos tecleados a mano. Con IA, la herramienta genera; yo dirijo, retoco el producto real y digo cómo la usé.</p>
+        <a class="mtd__proof" href="#ia"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="AI product imagery">Imagen de producto con IA</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="AI · Automation · E-commerce">IA · Automatización · E-commerce</p>
+      </li>
+      <li class="mtd" data-reveal>
+        <span class="mtd__n" aria-hidden="true">08</span>
+        <h3 class="mtd__t" data-en="Through to the final output">Hasta el resultado final</h3>
+        <p class="mtd__d" data-en="Prepress and on-site quality control in 5 host cities, sites I design and build myself, around 10 reels a month. I deliver the file that ships, not just the mockup.">Preprensa y control de calidad en sitio en 5 ciudades sede, sitios que diseño y construyo yo, unos 10 reels al mes. Entrego el archivo que sale, no solo la maqueta.</p>
+        <a class="mtd__proof" href="#eventos"><span class="mtd__pk" data-en="Proof">Prueba</span><span data-en="Events &amp; large format">Eventos y gran formato</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <p class="mtd__roles" data-en="Production · Print · Video">Producción · Impresión · Video</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
 <!-- ============ SERVICIOS ============ -->
-<section class="band" id="servicios" aria-labelledby="svcTitle">
+<section class="band band--alt" id="servicios" aria-labelledby="svcTitle">
   <div class="wrap">
     <div class="band__head">
       <h2 class="h2" id="svcTitle" data-reveal data-en="How I can help">Cómo puedo ayudarte</h2>
@@ -691,7 +762,7 @@
 </section>
 
 <!-- ============ EXPERIENCIA ============ -->
-<section class="band band--alt" id="experiencia" aria-labelledby="expTitle">
+<section class="band" id="experiencia" aria-labelledby="expTitle">
   <div class="wrap">
     <div class="band__head">
       <h2 class="h2" id="expTitle" data-reveal data-en="Experience">Experiencia</h2>
@@ -818,15 +889,15 @@
   </div>
 </div>
 
-<script src="js/gsap.min.js?v=20261028b" defer></script>
-<script src="js/ScrollTrigger.min.js?v=20261028b" defer></script>
-<script src="js/SplitText.min.js?v=20261028b" defer></script>
-<script src="js/ScrambleTextPlugin.min.js?v=20261028b" defer></script>
-<script src="js/MorphSVGPlugin.min.js?v=20261028b" defer></script>
-<script src="js/DrawSVGPlugin.min.js?v=20261028b" defer></script>
-<script src="js/CustomEase.min.js?v=20261028b" defer></script>
-<script src="js/lenis.min.js?v=20261028b" defer></script>
-<script src="js/reel.js?v=20261028b" defer></script>
-<script src="js/main.js?v=20261028b" defer></script>
+<script src="js/gsap.min.js?v=20261028c" defer></script>
+<script src="js/ScrollTrigger.min.js?v=20261028c" defer></script>
+<script src="js/SplitText.min.js?v=20261028c" defer></script>
+<script src="js/ScrambleTextPlugin.min.js?v=20261028c" defer></script>
+<script src="js/MorphSVGPlugin.min.js?v=20261028c" defer></script>
+<script src="js/DrawSVGPlugin.min.js?v=20261028c" defer></script>
+<script src="js/CustomEase.min.js?v=20261028c" defer></script>
+<script src="js/lenis.min.js?v=20261028c" defer></script>
+<script src="js/reel.js?v=20261028c" defer></script>
+<script src="js/main.js?v=20261028c" defer></script>
 </body>
 </html>

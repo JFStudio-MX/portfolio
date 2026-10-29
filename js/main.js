@@ -99,7 +99,7 @@
     }, { rootMargin: margin });
     targets.forEach(function (t) { if (t) obs.observe(t); });
   }
-  spy($$('.nav__links a[href^="#"]'), ['trabajo', 'servicios', 'experiencia', 'contacto'].map(function (id) { return document.getElementById(id); }), '-45% 0px -50% 0px');
+  spy($$('.nav__links a[href^="#"]'), ['trabajo', 'proceso', 'servicios', 'experiencia', 'contacto'].map(function (id) { return document.getElementById(id); }), '-45% 0px -50% 0px');
   spy($$('.case-toc a'), $$('.chap'), '-30% 0px -60% 0px');
 
   // Menú móvil
